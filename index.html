@@ -54,8 +54,24 @@ function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.
 function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;stockDate.value=stockDate.value||d;completePaidDate.value=completePaidDate.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);opt(itemDepartment,db.departments);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);loadBlocks();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable()}
 function loadBlocks(){const dep=expDepartment.value;opt(expBlock,db.blocks.filter(b=>b.department===dep).map(b=>b.name).concat(['General']).filter((v,i,a)=>a.indexOf(v)===i))}
 function statusBadge(s){return `<span class="status ${String(s||'Pending Approval').toLowerCase().replace(/[^a-z0-9]/g,'')}">${s}</span>`}
-function paidAmount(id){return (db.paymentLedger||[]).filter(p=>String(p.ExpenseID)===String(id)).reduce((s,p)=>s+Number(p.Amount||p.PaidAmount||0),0)}
-function balanceAmount(e){return Math.max(0,Number(e.Amount||0)-paidAmount(e.ID))}
+function paidAmount(id){
+  const exp = db.expenses.find(e => String(e.ID) === String(id));
+
+  if (exp && Number(exp.PaidAmount || 0) > 0) {
+    return Number(exp.PaidAmount || 0);
+  }
+
+  return (db.paymentLedger || [])
+    .filter(p => String(p.ExpenseID) === String(id))
+    .reduce((s,p) => s + Number(p.Amount || p.PaidAmount || 0), 0);
+}
+function balanceAmount(e){
+  if (Number(e.BalanceAmount || 0) >= 0 && e.BalanceAmount !== '') {
+    return Number(e.BalanceAmount || 0);
+  }
+
+  return Math.max(0, Number(e.Amount || 0) - paidAmount(e.ID));
+}
 function expenseRows(list, approval=false){let rows='<tr><th>Action</th><th>Date</th><th>Voucher</th><th>Dept</th><th>Block</th><th>Category</th><th>Vendor</th><th>PhonePe</th><th>Entered</th><th>Approved</th><th>Paid</th><th>Balance</th><th>Mode</th><th>Amount</th><th>Status</th><th>Remarks</th></tr>';list.slice().reverse().forEach(e=>{let paid=paidAmount(e.ID),bal=balanceAmount(e);let act='View only';if(approval&&canApprove()&&e.Status==='Pending Approval'){act=`<button class="btn-small" onclick="approveExpense('${e.ID}')">Approve</button><button class="btn-danger btn-small" onclick="rejectExpense('${e.ID}')">Reject</button>`;}else if((e.Status==='Approved'||e.Status==='Part Paid')&&canComplete()){act=`<button class="btn-warning btn-small" onclick="openComplete('${e.ID}')">Make Payment</button>`;}if(isAdmin()){act += `<br><button class="btn-danger btn-small" onclick="deleteExpense('${e.ID}')">Delete</button>`;}rows+=`<tr><td>${act}</td><td>${e.Date||''}</td><td>${e.Voucher||''}</td><td>${e.Department||''}</td><td>${e.Block||''}</td><td>${e.Category||''}</td><td>${e.Vendor||''}</td><td>${e.PhonePeNo||'-'}</td><td>${e.EnteredBy||''}<br><small>${e.CreatedOn||''}</small></td><td>${e.ApprovedBy||'-'}<br><small>${e.ApprovedOn||''}</small></td><td>${money(paid)}<br><small>${e.PaidBy||'-'} ${e.PaidOn||''}</small></td><td>${money(bal)}</td><td>${paid?e.PaymentMode||'Multiple':'Not activated'}</td><td>${money(e.Amount)}</td><td>${statusBadge(e.Status)}</td><td>${e.Remarks||''}</td></tr>`});return rows}
 function renderDashboard(){const t=today(),m=t.slice(0,7),ex=db.expenses;todayTotal.textContent=money(ex.filter(e=>e.Date===t).reduce((s,e)=>s+Number(e.Amount||0),0));monthTotal.textContent=money(ex.filter(e=>String(e.Date).slice(0,7)===m).reduce((s,e)=>s+Number(e.Amount||0),0));pendingTotal.textContent=money(ex.filter(e=>e.Status==='Pending Approval').reduce((s,e)=>s+Number(e.Amount||0),0));approvedTotal.textContent=money(ex.filter(e=>e.Status==='Approved').reduce((s,e)=>s+Number(e.Amount||0),0));completedTotal.textContent=money(ex.filter(e=>e.Status==='Completed').reduce((s,e)=>s+Number(e.Amount||0),0));paymentTodayTable.innerHTML='<tr><th>Mode</th><th>Amount</th></tr>'+db.paymentModes.map(pm=>`<tr><td>${pm}</td><td>${money(ex.filter(e=>e.Date===t&&e.Status==='Completed'&&e.PaymentMode===pm).reduce((s,e)=>s+Number(e.Amount||0),0))}</td></tr>`).join('')}
 function renderExpenses(){expenseTable.innerHTML=expenseRows(db.expenses.slice(-30))}function renderApprovals(){approvalTable.innerHTML=expenseRows(db.expenses.filter(e=>e.Status==='Pending Approval'),true)}function renderPendingPayments(){pendingPaymentsTable.innerHTML=expenseRows(db.expenses.filter(e=>e.Status==='Approved'||e.Status==='Part Paid'))}
