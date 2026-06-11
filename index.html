@@ -46,8 +46,43 @@ const API_URL='https://script.google.com/macros/s/AKfycbxskG-xeBDiQXuoJPi-Q3qh9F
 function showLoad(v){loading.style.display=v?'flex':'none'}
 async function api(action,payload={}){showLoad(true);try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,token})});const j=await r.json();if(!j.success)throw new Error(j.message||'Error');return j;}finally{showLoad(false)}}
 function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN')}function today(){return new Date().toISOString().slice(0,10)}function isAdmin(){return currentUser?.role==='Admin'}function isPrincipal(){return currentUser?.role==='Principal'}function isAccountant(){return currentUser?.role==='Accountant'}function isStore(){return currentUser?.role==='Store Keeper'}function canApprove(){return isAdmin()||isPrincipal()}function canComplete(){return isAdmin()||isPrincipal()||isAccountant()}function canDashboard(){return isAdmin()||isAccountant()}function canViewAll(){return canComplete()}function opt(sel,arr,all=false){sel.innerHTML=(all?'<option value="">All</option>':'')+arr.map(x=>`<option>${x}</option>`).join('')}
-async function login(){try{const j=await api('login',{username:loginUser.value.trim(),password:loginPass.value.trim()});token=j.token;currentUser=j.user;localStorage.setItem('TOKEN',token);localStorage.setItem('USER',JSON.stringify(currentUser));loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';await refresh();applyRole();if(!canDashboard())showSection('expenseEntry',document.querySelector("button[onclick*='expenseEntry']"));}catch(e){alert(e.message)}}
-function logout(){token='';currentUser=null;localStorage.removeItem('TOKEN');localStorage.removeItem('USER');app.style.display='none';loginPage.style.display='block'}
+async function login(){
+  try{
+    const j = await api('login',{
+      username: loginUser.value.trim(),
+      password: loginPass.value.trim()
+    });
+
+    token = j.token;
+    currentUser = j.user;
+
+    localStorage.setItem('TOKEN',token);
+    localStorage.setItem('USER',JSON.stringify(currentUser));
+
+    loginPage.style.display='none';
+    app.style.display='block';
+
+    userInfo.textContent =
+      currentUser.username + ' (' + currentUser.role + ')';
+
+    await refresh();
+
+    applyRole();
+
+    if(!canDashboard()){
+      showSection(
+        'expenseEntry',
+        document.querySelector("button[onclick*='expenseEntry']")
+      );
+    }
+
+    startAutoRefresh();
+
+  }catch(e){
+    alert(e.message);
+  }
+}
+function logout(){if(autoRefreshTimer) clearInterval(autoRefreshTimer);token='';currentUser=null;localStorage.removeItem('TOKEN');localStorage.removeItem('USER');app.style.display='none';loginPage.style.display='block'}
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.dashboard-only').forEach(e=>e.classList.toggle('hidden',!canDashboard()));document.querySelectorAll('.approve-only').forEach(e=>e.classList.toggle('hidden',!canApprove()));document.querySelectorAll('.pay-only').forEach(e=>e.classList.toggle('hidden',!canComplete()));document.querySelectorAll('.store-only').forEach(e=>e.classList.toggle('hidden',!(isAdmin()||isStore())))}
 function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAll()}
@@ -83,4 +118,18 @@ async function addMaster(type,input){try{const el=document.getElementById(input)
 function stockBalance(dep,item){let it=db.stockItems.find(x=>x.Department===dep&&x.Item===item);let bal=Number(it?.OpeningQty||0);db.stockLedger.filter(x=>x.Department===dep&&x.Item===item).forEach(x=>bal+=Number(x.InQty||0)-Number(x.OutQty||0));return bal}
 function renderStockEntryTable(){const dep=stockDepartment.value;const items=db.stockItems.filter(x=>x.Department===dep);stockEntryTable.innerHTML='<tr><th>Item</th><th>Balance</th><th>In Qty</th><th>In Rate</th><th>Out Qty</th><th>Out Rate</th></tr>'+items.map((it,i)=>`<tr><td>${it.Item} <small>${it.Unit||''}</small></td><td>${stockBalance(dep,it.Item)}</td><td><input type="number" data-item="${it.Item}" class="inqty"></td><td><input type="number" data-item="${it.Item}" class="inrate"></td><td><input type="number" data-item="${it.Item}" class="outqty"></td><td><input type="number" data-item="${it.Item}" class="outrate"></td></tr>`).join('')}
 async function saveStockEntry(){try{const entries=[];document.querySelectorAll('#stockEntryTable .inqty').forEach(inp=>{const item=inp.dataset.item;entries.push({item,inQty:inp.value,inRate:document.querySelector(`.inrate[data-item="${CSS.escape(item)}"]`).value,outQty:document.querySelector(`.outqty[data-item="${CSS.escape(item)}"]`).value,outRate:document.querySelector(`.outrate[data-item="${CSS.escape(item)}"]`).value})});await api('saveStockEntry',{date:stockDate.value,department:stockDepartment.value,remarks:stockRemarks.value,entries});await refresh();alert('Stock saved')}catch(e){alert(e.message)}}async function addStockItem(){try{await api('addStockItem',{department:itemDepartment.value,item:newItem.value.trim(),unit:newUnit.value.trim(),openingQty:openingQty.value});newItem.value='';newUnit.value='';openingQty.value='';await refresh()}catch(e){alert(e.message)}}
+let autoRefreshTimer = null;
+function startAutoRefresh(){
+  if(autoRefreshTimer) clearInterval(autoRefreshTimer);
+
+  autoRefreshTimer = setInterval(async ()=>{
+    if(token && currentUser){
+      try{
+        await refresh();
+      }catch(e){
+        console.log('Auto refresh failed', e.message);
+      }
+    }
+  }, 15000); // refresh every 15 seconds
+}
 </script></body></html>
