@@ -76,16 +76,31 @@ async function login(){
       );
     }
 
-    startAutoRefresh();
-
+    
   }catch(e){
     alert(e.message);
   }
 }
-function logout(){if(autoRefreshTimer) clearInterval(autoRefreshTimer);token='';currentUser=null;localStorage.removeItem('TOKEN');localStorage.removeItem('USER');app.style.display='none';loginPage.style.display='block'}
+function logout(){token='';currentUser=null;localStorage.removeItem('TOKEN');localStorage.removeItem('USER');app.style.display='none';loginPage.style.display='block'}
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.dashboard-only').forEach(e=>e.classList.toggle('hidden',!canDashboard()));document.querySelectorAll('.approve-only').forEach(e=>e.classList.toggle('hidden',!canApprove()));document.querySelectorAll('.pay-only').forEach(e=>e.classList.toggle('hidden',!canComplete()));document.querySelectorAll('.store-only').forEach(e=>e.classList.toggle('hidden',!(isAdmin()||isStore())))}
-function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAll()}
+async function showSection(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+
+  if(token && currentUser){
+    try{
+      const j = await api('getInit');
+      db = j.data;
+    }catch(e){
+      console.log('Refresh failed', e.message);
+    }
+  }
+
+  renderAll();
+}
 function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;stockDate.value=stockDate.value||d;completePaidDate.value=completePaidDate.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);if(document.getElementById("pendingVendorFilter")) opt(pendingVendorFilter,db.vendors,true);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);opt(itemDepartment,db.departments);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);loadBlocks();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable()}
 function loadBlocks(){const dep=expDepartment.value;opt(expBlock,db.blocks.filter(b=>b.department===dep).map(b=>b.name).concat(['General']).filter((v,i,a)=>a.indexOf(v)===i))}
 function statusBadge(s){return `<span class="status ${String(s||'Pending Approval').toLowerCase().replace(/[^a-z0-9]/g,'')}">${s}</span>`}
@@ -118,18 +133,4 @@ async function addMaster(type,input){try{const el=document.getElementById(input)
 function stockBalance(dep,item){let it=db.stockItems.find(x=>x.Department===dep&&x.Item===item);let bal=Number(it?.OpeningQty||0);db.stockLedger.filter(x=>x.Department===dep&&x.Item===item).forEach(x=>bal+=Number(x.InQty||0)-Number(x.OutQty||0));return bal}
 function renderStockEntryTable(){const dep=stockDepartment.value;const items=db.stockItems.filter(x=>x.Department===dep);stockEntryTable.innerHTML='<tr><th>Item</th><th>Balance</th><th>In Qty</th><th>In Rate</th><th>Out Qty</th><th>Out Rate</th></tr>'+items.map((it,i)=>`<tr><td>${it.Item} <small>${it.Unit||''}</small></td><td>${stockBalance(dep,it.Item)}</td><td><input type="number" data-item="${it.Item}" class="inqty"></td><td><input type="number" data-item="${it.Item}" class="inrate"></td><td><input type="number" data-item="${it.Item}" class="outqty"></td><td><input type="number" data-item="${it.Item}" class="outrate"></td></tr>`).join('')}
 async function saveStockEntry(){try{const entries=[];document.querySelectorAll('#stockEntryTable .inqty').forEach(inp=>{const item=inp.dataset.item;entries.push({item,inQty:inp.value,inRate:document.querySelector(`.inrate[data-item="${CSS.escape(item)}"]`).value,outQty:document.querySelector(`.outqty[data-item="${CSS.escape(item)}"]`).value,outRate:document.querySelector(`.outrate[data-item="${CSS.escape(item)}"]`).value})});await api('saveStockEntry',{date:stockDate.value,department:stockDepartment.value,remarks:stockRemarks.value,entries});await refresh();alert('Stock saved')}catch(e){alert(e.message)}}async function addStockItem(){try{await api('addStockItem',{department:itemDepartment.value,item:newItem.value.trim(),unit:newUnit.value.trim(),openingQty:openingQty.value});newItem.value='';newUnit.value='';openingQty.value='';await refresh()}catch(e){alert(e.message)}}
-let autoRefreshTimer = null;
-function startAutoRefresh(){
-  if(autoRefreshTimer) clearInterval(autoRefreshTimer);
-
-  autoRefreshTimer = setInterval(async ()=>{
-    if(token && currentUser){
-      try{
-        await refresh();
-      }catch(e){
-        console.log('Auto refresh failed', e.message);
-      }
-    }
-  }, 15000); // refresh every 15 seconds
-}
 </script></body></html>
