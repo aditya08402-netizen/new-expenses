@@ -28,7 +28,7 @@
 <button class="pay-only" onclick="showSection('pendingPayments',this)">Pending Payments</button>
 <button onclick="showSection('reports',this)">Reports</button>
 <button class="store-only" onclick="showSection('store',this)">Store Management</button>
-<button class="store-only" onclick="showSection('storeIssueReport',this)">Store Issue Report</button>
+<button class="store-only" onclick="showSection('storeLedgerReport',this)">Store Ledger Report</button>
 <button class="admin-only" onclick="showSection('masters',this)">Admin Masters</button>
 <button class="admin-only" onclick="showSection('users',this)">Users</button>
 </nav><main>
@@ -38,7 +38,7 @@
 <section id="pendingPayments" class="section"><div class="card"><h2>Approved Not Paid</h2><div class="form-grid"><div><label>Filter Vendor</label><select id="pendingVendorFilter" onchange="renderPendingPayments()"></select></div></div><table id="pendingPaymentsTable"></table><h2 style="margin-top:20px">Vendor Ledger</h2><table id="vendorLedgerTable"></table></div></section>
 <section id="reports" class="section"><div class="card"><h2>Reports</h2><div class="form-grid"><div><label>From</label><input type="date" id="repFrom"></div><div><label>To</label><input type="date" id="repTo"></div><div><label>Department</label><select id="repDepartment"></select></div><div><label>Status</label><select id="repStatus"><option value="">All</option><option>Pending Approval</option><option>Approved</option><option>Part Paid</option><option>Completed</option><option>Rejected</option></select></div></div><div class="top-actions"><button onclick="generateReport()">Generate</button><button class="btn-secondary" onclick="exportCSV()">Export CSV</button></div><table id="reportTable"></table></div></section>
 <section id="store" class="section"><div class="card"><h2>Store Entry</h2><div class="form-grid"><div><label>Date</label><input type="date" id="stockDate"></div><div><label>Department</label><select id="stockDepartment" onchange="renderStockEntryTable()"></select></div><div style="grid-column:1/-1"><label>Remarks</label><textarea id="stockRemarks"></textarea></div></div><table id="stockEntryTable"></table><div class="top-actions"><button onclick="saveStockEntry()">Save Stock Entry</button></div></div><div class="card admin-store"><h2>Add Stock Item</h2><div class="form-grid"><select id="itemDepartment"></select><input id="newItem" placeholder="Item name"><input id="newUnit" placeholder="Unit"><input id="openingQty" type="number" placeholder="Opening Qty"></div><div class="top-actions"><button onclick="addStockItem()">Add Item</button></div></div></section>
-<section id="storeIssueReport" class="section"><div class="card"><h2>Store Issue Report</h2><div class="form-grid"><div><label>From</label><input type="date" id="issueFrom"></div><div><label>To</label><input type="date" id="issueTo"></div><div><label>Department</label><select id="issueDepartment" onchange="loadIssueItems()"></select></div><div><label>Item</label><select id="issueItem"></select></div></div><div class="top-actions"><button onclick="generateStoreIssueReport()">Generate Report</button><button class="btn-secondary" onclick="exportStoreIssueCSV()">Export CSV</button></div><table id="issueSummaryTable"></table><table id="issueReportTable"></table></div></section>
+<section id="storeLedgerReport" class="section store-only"><div class="card"><h2>Store Ledger Report - Inward & Outward</h2><div class="form-grid"><div><label>From</label><input type="date" id="stockRepFrom"></div><div><label>To</label><input type="date" id="stockRepTo"></div><div><label>Department</label><select id="stockRepDepartment" onchange="loadStockReportItems();renderStoreLedgerReport()"></select></div><div><label>Item</label><select id="stockRepItem" onchange="renderStoreLedgerReport()"></select></div></div><div class="top-actions"><button onclick="renderStoreLedgerReport()">Generate Report</button><button class="btn-secondary" onclick="exportStoreLedgerCSV()">Export CSV</button></div></div><div class="card"><h2>Item-wise Stock Position</h2><table id="stockSummaryTable"></table></div><div class="card"><h2>Department-wise Consumption</h2><table id="stockConsumptionTable"></table></div><div class="card"><h2>Stock Valuation</h2><table id="stockValuationTable"></table></div><div class="card"><h2>Detailed Stock Ledger</h2><table id="stockLedgerReportTable"></table></div></section>
 <section id="masters" class="section admin-only"><div class="grid"><div class="card"><h2>Payment Modes</h2><input id="newPaymentMode"><button onclick="addMaster('PaymentMode','newPaymentMode')">Add</button></div><div class="card"><h2>Categories</h2><input id="newCategory"><button onclick="addMaster('Category','newCategory')">Add</button></div><div class="card"><h2>Departments</h2><input id="newDepartment"><button onclick="addMaster('Department','newDepartment')">Add</button></div><div class="card"><h2>Vendors</h2><input id="newVendor"><button onclick="addMaster('Vendor','newVendor')">Add</button></div><div class="card"><h2>Blocks</h2><select id="blockDepartment"></select><input id="newBlock"><button onclick="addBlock()">Add</button></div></div></section>
 <section id="users" class="section admin-only"><div class="card"><h2>Users</h2><div class="form-grid"><input id="newUserName" placeholder="Username"><input id="newUserPass" placeholder="Password"><select id="newUserRole"><option>Admin</option><option>Principal</option><option>Accountant</option><option>Store Keeper</option><option>Payment Entry User</option></select></div><div class="top-actions"><button onclick="addUser()">Add User</button></div><table id="usersTable"></table></div></section>
 </main></div></div>
@@ -103,7 +103,7 @@ async function showSection(id,btn){
 
   renderAll();
 }
-function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;stockDate.value=stockDate.value||d;completePaidDate.value=completePaidDate.value||d;if(document.getElementById('issueFrom'))issueFrom.value=issueFrom.value||d.slice(0,8)+'01';if(document.getElementById('issueTo'))issueTo.value=issueTo.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);if(document.getElementById("pendingVendorFilter")) opt(pendingVendorFilter,db.vendors,true);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);opt(itemDepartment,db.departments);if(document.getElementById('issueDepartment')) opt(issueDepartment,db.departments,true);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);loadBlocks();loadIssueItems();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable();if(document.getElementById('storeIssueReport')&&storeIssueReport.classList.contains('active'))generateStoreIssueReport()}
+function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;stockDate.value=stockDate.value||d;if(document.getElementById('stockRepFrom')) stockRepFrom.value=stockRepFrom.value||d.slice(0,8)+'01';if(document.getElementById('stockRepTo')) stockRepTo.value=stockRepTo.value||d;completePaidDate.value=completePaidDate.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);if(document.getElementById("pendingVendorFilter")) opt(pendingVendorFilter,db.vendors,true);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);if(document.getElementById('stockRepDepartment')) optPreserve(stockRepDepartment,db.departments,true);loadStockReportItems();opt(itemDepartment,db.departments);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);loadBlocks();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable();renderStoreLedgerReport()}
 function loadBlocks(){const dep=expDepartment.value;opt(expBlock,db.blocks.filter(b=>b.department===dep).map(b=>b.name).concat(['General']).filter((v,i,a)=>a.indexOf(v)===i))}
 function statusBadge(s){return `<span class="status ${String(s||'Pending Approval').toLowerCase().replace(/[^a-z0-9]/g,'')}">${s}</span>`}
 function paidAmount(id){
@@ -132,54 +132,100 @@ async function saveExpense(){try{await api('addExpense',{date:expDate.value,depa
 async function approveExpense(id){if(confirm('Approve this expense?')){await api('approveExpense',{id});await refresh()}}async function rejectExpense(id){if(confirm('Reject this expense?')){await api('rejectExpense',{id});await refresh()}}async function deleteExpense(id){if(!isAdmin())return alert('Only Admin can delete vouchers.');if(confirm('Delete this voucher permanently?')){await api('deleteExpense',{id});await refresh();alert('Voucher deleted')}}function openComplete(id){const e=db.expenses.find(x=>String(x.ID)===String(id));completeId.value=id;const bal=e?balanceAmount(e):0;paymentBalanceNote.textContent='Balance: '+money(bal);completeAmount.value=bal;completeAmount.max=bal;completeModal.classList.remove('hidden')}async function completeExpense(){try{await api('completeExpense',{id:completeId.value,paymentMode:completeMode.value,paidDate:completePaidDate.value,amount:completeAmount.value});completeModal.classList.add('hidden');await refresh();alert('Payment saved')}catch(e){alert(e.message)}}
 let lastReport=[];function generateReport(){const f=repFrom.value,t=repTo.value,d=repDepartment.value,s=repStatus.value;lastReport=db.expenses.filter(e=>(!f||e.Date>=f)&&(!t||e.Date<=t)&&(!d||e.Department===d)&&(!s||e.Status===s));reportTable.innerHTML=expenseRows(lastReport)}function exportCSV(){generateReport();let csv='Date,Voucher,Department,Block,Category,Vendor,PhonePe,EnteredBy,ApprovedBy,PaidBy,PaymentMode,Amount,Status,Remarks\n';lastReport.forEach(e=>csv+=[e.Date,e.Voucher,e.Department,e.Block,e.Category,e.Vendor,e.PhonePeNo,e.EnteredBy,e.ApprovedBy,e.PaidBy,e.PaymentMode,e.Amount,e.Status,String(e.Remarks||'').replaceAll(',',' ')].join(',')+'\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='expense_report.csv';a.click()}
 async function addMaster(type,input){try{const el=document.getElementById(input);await api('addMaster',{type,name:el.value.trim()});el.value='';await refresh()}catch(e){alert(e.message)}}async function addBlock(){try{await api('addBlock',{department:blockDepartment.value,block:newBlock.value.trim()});newBlock.value='';await refresh()}catch(e){alert(e.message)}}async function addUser(){try{await api('addUser',{username:newUserName.value.trim(),password:newUserPass.value.trim(),role:newUserRole.value});newUserName.value='';newUserPass.value='';await refresh()}catch(e){alert(e.message)}}function renderUsers(){if(!usersTable)return;usersTable.innerHTML='<tr><th>Username</th><th>Role</th><th>Active</th></tr>'+db.users.map(u=>`<tr><td>${u.Username}</td><td>${u.Role}</td><td>${u.Active}</td></tr>`).join('')}
+
+function optPreserve(sel,arr,all=false){
+  if(!sel) return;
+  const old=sel.value;
+  sel.innerHTML=(all?'<option value="">All</option>':'')+arr.map(x=>`<option>${x}</option>`).join('');
+  if([...sel.options].some(o=>o.value===old)) sel.value=old;
+}
+function stockReportRows(){
+  const from=document.getElementById('stockRepFrom')?stockRepFrom.value:'';
+  const to=document.getElementById('stockRepTo')?stockRepTo.value:'';
+  const dep=document.getElementById('stockRepDepartment')?stockRepDepartment.value:'';
+  const item=document.getElementById('stockRepItem')?stockRepItem.value:'';
+  return (db.stockLedger||[]).filter(r=>{
+    const d=r.Date||r.date||'';
+    const rd=r.Department||r.department||'';
+    const it=r.Item||r.item||'';
+    return (!from||d>=from)&&(!to||d<=to)&&(!dep||rd===dep)&&(!item||it===item);
+  });
+}
+function loadStockReportItems(){
+  if(!document.getElementById('stockRepItem')) return;
+  const dep=stockRepDepartment.value;
+  const items=[...new Set((db.stockItems||[]).filter(x=>!dep||x.Department===dep).map(x=>x.Item).filter(Boolean))];
+  optPreserve(stockRepItem,items,true);
+}
+function itemOpening(dep,item){
+  const it=(db.stockItems||[]).find(x=>(!dep||x.Department===dep)&&x.Item===item);
+  return Number(it?.OpeningQty||0);
+}
+function itemAvgRate(item,dep=''){
+  const rows=(db.stockLedger||[]).filter(r=>(!dep||r.Department===dep)&&r.Item===item&&Number(r.InQty||0)>0&&Number(r.InRate||0)>0);
+  const qty=rows.reduce((s,r)=>s+Number(r.InQty||0),0);
+  const val=rows.reduce((s,r)=>s+Number(r.InQty||0)*Number(r.InRate||0),0);
+  return qty?val/qty:0;
+}
+function renderStoreLedgerReport(){
+  if(!document.getElementById('stockLedgerReportTable')) return;
+  const rows=stockReportRows();
+  let balMap={};
+  let detail='<tr><th>Date</th><th>Department</th><th>Item</th><th>In Qty</th><th>In Rate</th><th>In Value</th><th>Out Qty</th><th>Out Rate</th><th>Out Value</th><th>Balance</th><th>Remarks</th><th>Entered By</th></tr>';
+  rows.slice().sort((a,b)=>String(a.Date).localeCompare(String(b.Date))).forEach(r=>{
+    const dep=r.Department||'', item=r.Item||'', key=dep+'|'+item;
+    if(!(key in balMap)) balMap[key]=itemOpening(dep,item);
+    const inQty=Number(r.InQty||0), inRate=Number(r.InRate||0), outQty=Number(r.OutQty||0), outRate=Number(r.OutRate||0);
+    balMap[key]+=inQty-outQty;
+    detail+=`<tr><td>${r.Date||''}</td><td>${dep}</td><td>${item}</td><td>${inQty||''}</td><td>${inRate?money(inRate):''}</td><td>${inQty&&inRate?money(inQty*inRate):''}</td><td>${outQty||''}</td><td>${outRate?money(outRate):''}</td><td>${outQty&&outRate?money(outQty*outRate):''}</td><td>${balMap[key]}</td><td>${r.Remarks||''}</td><td>${r.EnteredBy||r.CreatedBy||''}</td></tr>`;
+  });
+  if(rows.length===0) detail+='<tr><td colspan="12">No stock transactions found</td></tr>';
+  stockLedgerReportTable.innerHTML=detail;
+
+  const summary={};
+  (db.stockItems||[]).forEach(it=>{
+    const dep=it.Department||'', item=it.Item||'', key=dep+'|'+item;
+    if(!summary[key]) summary[key]={department:dep,item:item,opening:Number(it.OpeningQty||0),inQty:0,outQty:0,closing:Number(it.OpeningQty||0),inValue:0,outValue:0};
+  });
+  (db.stockLedger||[]).forEach(r=>{
+    const dep=r.Department||'', item=r.Item||'', key=dep+'|'+item;
+    const reportDep=document.getElementById('stockRepDepartment')?stockRepDepartment.value:'';
+    const reportItem=document.getElementById('stockRepItem')?stockRepItem.value:'';
+    if(reportDep&&dep!==reportDep) return;
+    if(reportItem&&item!==reportItem) return;
+    if(!summary[key]) summary[key]={department:dep,item:item,opening:0,inQty:0,outQty:0,closing:0,inValue:0,outValue:0};
+    const inQty=Number(r.InQty||0), outQty=Number(r.OutQty||0), inRate=Number(r.InRate||0), outRate=Number(r.OutRate||0);
+    summary[key].inQty+=inQty; summary[key].outQty+=outQty; summary[key].inValue+=inQty*inRate; summary[key].outValue+=outQty*outRate;
+    summary[key].closing=summary[key].opening+summary[key].inQty-summary[key].outQty;
+  });
+  let sumRows='<tr><th>Department</th><th>Item</th><th>Opening</th><th>Total In</th><th>Total Out</th><th>Closing</th></tr>';
+  Object.values(summary).filter(x=>x.item).sort((a,b)=>(a.department+a.item).localeCompare(b.department+b.item)).forEach(x=>sumRows+=`<tr><td>${x.department}</td><td>${x.item}</td><td>${x.opening}</td><td>${x.inQty}</td><td>${x.outQty}</td><td>${x.closing}</td></tr>`);
+  stockSummaryTable.innerHTML=sumRows;
+
+  const cons={};
+  rows.forEach(r=>{
+    const outQty=Number(r.OutQty||0); if(!outQty) return;
+    const key=(r.Department||'')+'|'+(r.Item||'');
+    if(!cons[key]) cons[key]={department:r.Department||'',item:r.Item||'',qty:0,value:0};
+    cons[key].qty+=outQty; cons[key].value+=outQty*Number(r.OutRate||0);
+  });
+  let consRows='<tr><th>Department</th><th>Item</th><th>Issued Qty</th><th>Issue Value</th></tr>';
+  Object.values(cons).sort((a,b)=>(a.department+a.item).localeCompare(b.department+b.item)).forEach(x=>consRows+=`<tr><td>${x.department}</td><td>${x.item}</td><td>${x.qty}</td><td>${money(x.value)}</td></tr>`);
+  if(Object.keys(cons).length===0) consRows+='<tr><td colspan="4">No outward/issues found</td></tr>';
+  stockConsumptionTable.innerHTML=consRows;
+
+  let valRows='<tr><th>Department</th><th>Item</th><th>Balance Qty</th><th>Avg In Rate</th><th>Stock Value</th></tr>';
+  Object.values(summary).filter(x=>x.item).sort((a,b)=>(a.department+a.item).localeCompare(b.department+b.item)).forEach(x=>{const rate=itemAvgRate(x.item,x.department);valRows+=`<tr><td>${x.department}</td><td>${x.item}</td><td>${x.closing}</td><td>${money(rate)}</td><td>${money(x.closing*rate)}</td></tr>`});
+  stockValuationTable.innerHTML=valRows;
+}
+function exportStoreLedgerCSV(){
+  renderStoreLedgerReport();
+  const rows=stockReportRows();
+  let csv='Date,Department,Item,InQty,InRate,InValue,OutQty,OutRate,OutValue,Remarks,EnteredBy\n';
+  rows.forEach(r=>{const inQty=Number(r.InQty||0),inRate=Number(r.InRate||0),outQty=Number(r.OutQty||0),outRate=Number(r.OutRate||0);csv+=[r.Date,r.Department,r.Item,inQty,inRate,inQty*inRate,outQty,outRate,outQty*outRate,String(r.Remarks||'').replaceAll(',',' '),r.EnteredBy||''].join(',')+'\n'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='store_ledger_report.csv';a.click();
+}
 function stockBalance(dep,item){let it=db.stockItems.find(x=>x.Department===dep&&x.Item===item);let bal=Number(it?.OpeningQty||0);db.stockLedger.filter(x=>x.Department===dep&&x.Item===item).forEach(x=>bal+=Number(x.InQty||0)-Number(x.OutQty||0));return bal}
 function renderStockEntryTable(){const dep=stockDepartment.value;const items=db.stockItems.filter(x=>x.Department===dep);stockEntryTable.innerHTML='<tr><th>Item</th><th>Balance</th><th>In Qty</th><th>In Rate</th><th>Out Qty</th><th>Out Rate</th></tr>'+items.map((it,i)=>`<tr><td>${it.Item} <small>${it.Unit||''}</small></td><td>${stockBalance(dep,it.Item)}</td><td><input type="number" data-item="${it.Item}" class="inqty"></td><td><input type="number" data-item="${it.Item}" class="inrate"></td><td><input type="number" data-item="${it.Item}" class="outqty"></td><td><input type="number" data-item="${it.Item}" class="outrate"></td></tr>`).join('')}
-
-function loadIssueItems(){
-  if(!document.getElementById('issueItem')) return;
-  const dep = issueDepartment ? issueDepartment.value : '';
-  const items = (db.stockItems || [])
-    .filter(x => !dep || x.Department === dep)
-    .map(x => x.Item)
-    .filter((v,i,a) => v && a.indexOf(v) === i)
-    .sort();
-  opt(issueItem, items, true);
-}
-let lastIssueReport=[];
-function generateStoreIssueReport(){
-  const from = issueFrom ? issueFrom.value : '';
-  const to = issueTo ? issueTo.value : '';
-  const dep = issueDepartment ? issueDepartment.value : '';
-  const item = issueItem ? issueItem.value : '';
-  lastIssueReport = (db.stockLedger || []).filter(r => {
-    const outQty = Number(r.OutQty || r.outQty || 0);
-    const date = r.Date || r.date || '';
-    return outQty > 0 && (!from || date >= from) && (!to || date <= to) && (!dep || r.Department === dep) && (!item || r.Item === item);
-  });
-  const totalQty = lastIssueReport.reduce((s,r)=>s+Number(r.OutQty || r.outQty || 0),0);
-  const totalValue = lastIssueReport.reduce((s,r)=>s+(Number(r.OutQty || r.outQty || 0)*Number(r.OutRate || r.outRate || 0)),0);
-  issueSummaryTable.innerHTML = `<tr><th>Total Issue Qty</th><th>Total Issue Value</th><th>Entries</th></tr><tr><td>${totalQty}</td><td>${money(totalValue)}</td><td>${lastIssueReport.length}</td></tr>`;
-  let rows = '<tr><th>Date</th><th>Department</th><th>Item</th><th>Out Qty</th><th>Rate</th><th>Value</th><th>Remarks</th><th>Entered By</th><th>Entered On</th></tr>';
-  lastIssueReport.slice().reverse().forEach(r=>{
-    const outQty = Number(r.OutQty || r.outQty || 0);
-    const rate = Number(r.OutRate || r.outRate || 0);
-    rows += `<tr><td>${r.Date || ''}</td><td>${r.Department || ''}</td><td>${r.Item || ''}</td><td>${outQty}</td><td>${money(rate)}</td><td>${money(outQty*rate)}</td><td>${r.Remarks || ''}</td><td>${r.EnteredBy || ''}</td><td>${r.CreatedOn || r.EnteredOn || ''}</td></tr>`;
-  });
-  if(lastIssueReport.length===0) rows += '<tr><td colspan="9">No store issue records found</td></tr>';
-  issueReportTable.innerHTML = rows;
-}
-function exportStoreIssueCSV(){
-  generateStoreIssueReport();
-  let csv='Date,Department,Item,OutQty,Rate,Value,Remarks,EnteredBy,EnteredOn\n';
-  lastIssueReport.forEach(r=>{
-    const outQty = Number(r.OutQty || r.outQty || 0);
-    const rate = Number(r.OutRate || r.outRate || 0);
-    csv += [r.Date||'',r.Department||'',r.Item||'',outQty,rate,outQty*rate,String(r.Remarks||'').replaceAll(',',' '),r.EnteredBy||'',r.CreatedOn||r.EnteredOn||''].join(',')+'\n';
-  });
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download='store_issue_report.csv';
-  a.click();
-}
 async function saveStockEntry(){try{const entries=[];document.querySelectorAll('#stockEntryTable .inqty').forEach(inp=>{const item=inp.dataset.item;entries.push({item,inQty:inp.value,inRate:document.querySelector(`.inrate[data-item="${CSS.escape(item)}"]`).value,outQty:document.querySelector(`.outqty[data-item="${CSS.escape(item)}"]`).value,outRate:document.querySelector(`.outrate[data-item="${CSS.escape(item)}"]`).value})});await api('saveStockEntry',{date:stockDate.value,department:stockDepartment.value,remarks:stockRemarks.value,entries});await refresh();alert('Stock saved')}catch(e){alert(e.message)}}async function addStockItem(){try{await api('addStockItem',{department:itemDepartment.value,item:newItem.value.trim(),unit:newUnit.value.trim(),openingQty:openingQty.value});newItem.value='';newUnit.value='';openingQty.value='';await refresh()}catch(e){alert(e.message)}}
 </script></body></html>
