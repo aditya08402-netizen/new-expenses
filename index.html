@@ -43,6 +43,7 @@
 <section id="users" class="section admin-only"><div class="card"><h2>Users</h2><div class="form-grid"><input id="newUserName" placeholder="Username"><input id="newUserPass" placeholder="Password"><select id="newUserRole"><option>Admin</option><option>Principal</option><option>Accountant</option><option>Store Keeper</option><option>Payment Entry User</option></select></div><div class="top-actions"><button onclick="addUser()">Add User</button></div><table id="usersTable"></table></div></section>
 </main></div></div>
 <div id="completeModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px"><div class="card" style="max-width:500px;margin:50px auto"><h2>Make Payment / Part Payment</h2><input type="hidden" id="completeId"><div class="note" id="paymentBalanceNote">Balance: ₹0</div><label>Payment Amount</label><input type="number" id="completeAmount" placeholder="Enter paid amount"><label>Payment Mode</label><select id="completeMode"></select><label>Paid Date</label><input type="date" id="completePaidDate"><div class="top-actions"><button onclick="completeExpense()">Save Payment</button><button class="btn-secondary" onclick="completeModal.classList.add('hidden')">Cancel</button></div></div></div>
+<div id="vendorPayModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px"><div class="card" style="max-width:540px;margin:50px auto"><h2>Vendor Single Payment</h2><div class="note" id="vendorPayNote">Outstanding: ₹0</div><label>Vendor</label><select id="vendorPayVendor"></select><label>Payment Amount</label><input type="number" id="vendorPayAmount" placeholder="Enter payment amount"><label>Payment Mode</label><select id="vendorPayMode"></select><label>Paid Date</label><input type="date" id="vendorPayDate"><div style="grid-column:1/-1"><label>Remarks</label><textarea id="vendorPayRemarks" placeholder="Optional remarks"></textarea></div><div class="top-actions"><button onclick="saveVendorPayment()">Save Vendor Payment</button><button class="btn-secondary" onclick="vendorPayModal.classList.add('hidden')">Cancel</button></div></div></div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbxskG-xeBDiQXuoJPi-Q3qh9FAyCZ7u3NgtBFQ8hCjwYjcXLIZ2BWyJgpJWann72LNu/exec';let token=localStorage.getItem('TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('USER')||'null');let db={paymentModes:[],categories:[],departments:[],vendors:[],blocks:[],expenses:[],users:[],stockItems:[],stockLedger:[],paymentLedger:[],serverDate:''};
 function showLoad(v){loading.style.display=v?'flex':'none'}
@@ -103,7 +104,7 @@ async function showSection(id,btn){
 
   renderAll();
 }
-function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;if(document.getElementById('vendorRepFrom')) vendorRepFrom.value=vendorRepFrom.value||d.slice(0,8)+'01';if(document.getElementById('vendorRepTo')) vendorRepTo.value=vendorRepTo.value||d;stockDate.value=stockDate.value||d;if(document.getElementById('stockRepFrom')) stockRepFrom.value=stockRepFrom.value||d.slice(0,8)+'01';if(document.getElementById('stockRepTo')) stockRepTo.value=stockRepTo.value||d;completePaidDate.value=completePaidDate.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);if(document.getElementById('vendorRepVendor')) optPreserve(vendorRepVendor,db.vendors,true);if(document.getElementById("pendingVendorFilter")) opt(pendingVendorFilter,db.vendors,true);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);if(document.getElementById('stockRepDepartment')) optPreserve(stockRepDepartment,db.departments,true);loadStockReportItems();opt(itemDepartment,db.departments);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);loadBlocks();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable();renderStoreLedgerReport();if(document.getElementById('vendorReportSummaryTable')) generateVendorReport()}
+function renderAll(){const d=db.serverDate||today();expDate.value=expDate.value||d;repFrom.value=repFrom.value||d.slice(0,8)+'01';repTo.value=repTo.value||d;if(document.getElementById('vendorRepFrom')) vendorRepFrom.value=vendorRepFrom.value||d.slice(0,8)+'01';if(document.getElementById('vendorRepTo')) vendorRepTo.value=vendorRepTo.value||d;stockDate.value=stockDate.value||d;if(document.getElementById('stockRepFrom')) stockRepFrom.value=stockRepFrom.value||d.slice(0,8)+'01';if(document.getElementById('stockRepTo')) stockRepTo.value=stockRepTo.value||d;completePaidDate.value=completePaidDate.value||d;opt(expDepartment,db.departments);opt(expCategory,db.categories);opt(expVendor,db.vendors);if(document.getElementById('vendorRepVendor')) optPreserve(vendorRepVendor,db.vendors,true);if(document.getElementById("pendingVendorFilter")) opt(pendingVendorFilter,db.vendors,true);opt(repDepartment,db.departments,true);opt(stockDepartment,db.departments);if(document.getElementById('stockRepDepartment')) optPreserve(stockRepDepartment,db.departments,true);loadStockReportItems();opt(itemDepartment,db.departments);opt(blockDepartment,db.departments);opt(completeMode,db.paymentModes);if(document.getElementById('vendorPayVendor')) opt(vendorPayVendor,db.vendors);if(document.getElementById('vendorPayMode')) opt(vendorPayMode,db.paymentModes);if(document.getElementById('vendorPayDate')) vendorPayDate.value=vendorPayDate.value||d;loadBlocks();renderDashboard();renderExpenses();renderApprovals();renderPendingPayments();renderUsers();renderStockEntryTable();renderStoreLedgerReport();if(document.getElementById('vendorReportSummaryTable')) generateVendorReport()}
 function loadBlocks(){const dep=expDepartment.value;opt(expBlock,db.blocks.filter(b=>b.department===dep).map(b=>b.name).concat(['General']).filter((v,i,a)=>a.indexOf(v)===i))}
 function statusBadge(s){return `<span class="status ${String(s||'Pending Approval').toLowerCase().replace(/[^a-z0-9]/g,'')}">${s}</span>`}
 function paidAmount(id){
@@ -127,7 +128,51 @@ function balanceAmount(e){
 function expenseRows(list, approval=false){let rows='<tr><th>Action</th><th>Date</th><th>Voucher</th><th>Dept</th><th>Block</th><th>Category</th><th>Vendor</th><th>PhonePe</th><th>Entered</th><th>Approved</th><th>Paid</th><th>Balance</th><th>Mode</th><th>Amount</th><th>Status</th><th>Remarks</th></tr>';list.slice().reverse().forEach(e=>{let paid=paidAmount(e.ID),bal=balanceAmount(e);let act='View only';if(approval&&canApprove()&&e.Status==='Pending Approval'){act=`<button class="btn-small" onclick="approveExpense('${e.ID}')">Approve</button><button class="btn-danger btn-small" onclick="rejectExpense('${e.ID}')">Reject</button>`;}else if((e.Status==='Approved'||e.Status==='Part Paid')&&canComplete()){act=`<button class="btn-warning btn-small" onclick="openComplete('${e.ID}')">Make Payment</button>`;}if(isAdmin()){act += `<br><button class="btn-danger btn-small" onclick="deleteExpense('${e.ID}')">Delete</button>`;}rows+=`<tr><td>${act}</td><td>${e.Date||''}</td><td>${e.Voucher||''}</td><td>${e.Department||''}</td><td>${e.Block||''}</td><td>${e.Category||''}</td><td>${e.Vendor||''}</td><td>${e.PhonePeNo||'-'}</td><td>${e.EnteredBy||''}<br><small>${e.CreatedOn||''}</small></td><td>${e.ApprovedBy||'-'}<br><small>${e.ApprovedOn||''}</small></td><td>${money(paid)}<br><small>${e.PaidBy||'-'} ${e.PaidOn||''}</small></td><td>${money(bal)}</td><td>${paid?e.PaymentMode||'Multiple':'Not activated'}</td><td>${money(e.Amount)}</td><td>${statusBadge(e.Status)}</td><td>${e.Remarks||''}</td></tr>`});return rows}
 function renderDashboard(){const t=today(),m=t.slice(0,7),ex=db.expenses;todayTotal.textContent=money(ex.filter(e=>e.Date===t).reduce((s,e)=>s+Number(e.Amount||0),0));monthTotal.textContent=money(ex.filter(e=>String(e.Date).slice(0,7)===m).reduce((s,e)=>s+Number(e.Amount||0),0));pendingTotal.textContent=money(ex.filter(e=>e.Status==='Pending Approval').reduce((s,e)=>s+Number(e.Amount||0),0));approvedTotal.textContent=money(ex.filter(e=>e.Status==='Approved').reduce((s,e)=>s+Number(e.Amount||0),0));completedTotal.textContent=money(ex.filter(e=>e.Status==='Completed').reduce((s,e)=>s+Number(e.Amount||0),0));paymentTodayTable.innerHTML='<tr><th>Mode</th><th>Amount</th></tr>'+db.paymentModes.map(pm=>`<tr><td>${pm}</td><td>${money(ex.filter(e=>e.Date===t&&e.Status==='Completed'&&e.PaymentMode===pm).reduce((s,e)=>s+Number(e.Amount||0),0))}</td></tr>`).join('')}
 function renderExpenses(){expenseTable.innerHTML=expenseRows(db.expenses.slice(-30))}function renderApprovals(){approvalTable.innerHTML=expenseRows(db.expenses.filter(e=>e.Status==='Pending Approval'),true)}function renderPendingPayments(){const vendor=document.getElementById('pendingVendorFilter')?pendingVendorFilter.value:'';pendingPaymentsTable.innerHTML=expenseRows(db.expenses.filter(e=>(e.Status==='Approved'||e.Status==='Part Paid')&&(!vendor||e.Vendor===vendor)));renderVendorLedger(vendor)}
-function renderVendorLedger(vendor=''){if(!document.getElementById('vendorLedgerTable'))return;const list=db.expenses.filter(e=>(!vendor||e.Vendor===vendor)&&e.Status!=='Rejected');const map={};list.forEach(e=>{const v=e.Vendor||'No Vendor';if(!map[v])map[v]={bill:0,paid:0,balance:0};map[v].bill+=Number(e.Amount||0);map[v].paid+=paidAmount(e.ID);map[v].balance+=balanceAmount(e)});let rows='<tr><th>Vendor</th><th>Total Bill</th><th>Paid</th><th>Balance</th></tr>';Object.keys(map).sort().forEach(v=>{rows+=`<tr><td>${v}</td><td>${money(map[v].bill)}</td><td>${money(map[v].paid)}</td><td>${money(map[v].balance)}</td></tr>`});if(Object.keys(map).length===0)rows+='<tr><td colspan="4">No vendor ledger found</td></tr>';vendorLedgerTable.innerHTML=rows}
+function renderVendorLedger(vendor=''){
+  if(!document.getElementById('vendorLedgerTable'))return;
+  const list=db.expenses.filter(e=>(!vendor||e.Vendor===vendor)&&e.Status!=='Rejected');
+  const map={};
+  list.forEach(e=>{
+    const v=e.Vendor||'No Vendor';
+    if(!map[v])map[v]={bill:0,paid:0,balance:0};
+    map[v].bill+=Number(e.Amount||0);
+    map[v].paid+=paidAmount(e.ID);
+    map[v].balance+=balanceAmount(e);
+  });
+  let rows='<tr><th>Vendor</th><th>Total Bill</th><th>Paid</th><th>Balance</th><th>Action</th></tr>';
+  Object.keys(map).sort().forEach(v=>{
+    const bal=map[v].balance;
+    const btn=bal>0?`<button class="btn-warning btn-small" onclick="openVendorPayment('${encodeURIComponent(v)}',${bal})">Pay Vendor</button>`:'-';
+    rows+=`<tr><td>${v}</td><td>${money(map[v].bill)}</td><td>${money(map[v].paid)}</td><td>${money(bal)}</td><td>${btn}</td></tr>`;
+  });
+  if(Object.keys(map).length===0)rows+='<tr><td colspan="5">No vendor ledger found</td></tr>';
+  vendorLedgerTable.innerHTML=rows;
+}
+function openVendorPayment(vendorEncoded,balance){
+  const vendor=decodeURIComponent(vendorEncoded||'');
+  vendorPayVendor.value=vendor;
+  vendorPayNote.textContent='Outstanding for '+vendor+': '+money(balance);
+  vendorPayAmount.value=balance;
+  vendorPayAmount.max=balance;
+  vendorPayRemarks.value='';
+  vendorPayModal.classList.remove('hidden');
+}
+async function saveVendorPayment(){
+  try{
+    await api('vendorPayment',{
+      vendor:vendorPayVendor.value,
+      amount:vendorPayAmount.value,
+      paymentMode:vendorPayMode.value,
+      paidDate:vendorPayDate.value,
+      remarks:vendorPayRemarks.value
+    });
+    vendorPayModal.classList.add('hidden');
+    await refresh();
+    alert('Vendor payment adjusted successfully');
+  }catch(e){
+    alert(e.message);
+  }
+}
 async function saveExpense(){try{await api('addExpense',{date:expDate.value,department:expDepartment.value,block:expBlock.value,category:expCategory.value,vendor:expVendor.value,phonePeNo:expPhonePeNo.value,amount:expAmount.value,dueDate:expDueDate.value,remarks:expRemarks.value});expAmount.value='';expPhonePeNo.value='';expRemarks.value='';expDueDate.value='';await refresh();alert('Saved as Pending Approval')}catch(e){alert(e.message)}}
 async function approveExpense(id){if(confirm('Approve this expense?')){await api('approveExpense',{id});await refresh()}}async function rejectExpense(id){if(confirm('Reject this expense?')){await api('rejectExpense',{id});await refresh()}}async function deleteExpense(id){if(!isAdmin())return alert('Only Admin can delete vouchers.');if(confirm('Delete this voucher permanently?')){await api('deleteExpense',{id});await refresh();alert('Voucher deleted')}}function openComplete(id){const e=db.expenses.find(x=>String(x.ID)===String(id));completeId.value=id;const bal=e?balanceAmount(e):0;paymentBalanceNote.textContent='Balance: '+money(bal);completeAmount.value=bal;completeAmount.max=bal;completeModal.classList.remove('hidden')}async function completeExpense(){try{await api('completeExpense',{id:completeId.value,paymentMode:completeMode.value,paidDate:completePaidDate.value,amount:completeAmount.value});completeModal.classList.add('hidden');await refresh();alert('Payment saved')}catch(e){alert(e.message)}}
 
