@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sri Vivekananda ERP</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f7fb;
+}
+
+.header{
+    background:#0f766e;
+    color:#fff;
+    padding:20px;
+    text-align:center;
+    font-size:30px;
+    font-weight:bold;
+}
+
+.sub{
+    text-align:center;
+    color:#666;
+    margin:15px;
+    font-size:18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+    padding:35px;
+    max-width:1100px;
+    margin:auto;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:35px;
+    text-align:center;
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+
+.card h2{
+    margin-bottom:15px;
+    color:#0f766e;
+}
+
+.card p{
+    color:#555;
+    min-height:60px;
+}
+
+.card button{
+    background:#0f766e;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    font-size:16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.card button:hover{
+    background:#0d5e58;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+Sri Vivekananda ERP
+</div>
+
+<div class="sub">
+Integrated College • Hostel • Fee • Store Management System
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>Expense & Store</h2>
+<p>
+Expenses, Store Stock, Vendor Payments, Reports
+</p>
+
+<button onclick="location.href='expense.html'">
+Open Module
+</button>
+</div>
+
+<div class="card">
+<h2>Fee Management</h2>
+<p>
+Students, Fee Collection, Receipts, Due Reports
+</p>
+
+<button onclick="location.href='fee.html'">
+Open Module
+</button>
+</div>
+
+<div class="card">
+<h2>Hostel Management</h2>
+<p>
+Room Allotment, Hostel Fees, Occupancy
+</p>
+
+<button disabled>
+Coming Soon
+</button>
+</div>
+
+<div class="card">
+<h2>Attendance</h2>
+<p>
+Student Attendance & Reports
+</p>
+
+<button disabled>
+Coming Soon
+</button>
+</div>
+
+</div>
+
+</body>
+</html>
