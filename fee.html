@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fee Management ERP</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}body{background:#f4f7fb;color:#1f2937}.hidden{display:none!important}.loading{position:fixed;inset:0;background:rgba(255,255,255,.75);display:none;align-items:center;justify-content:center;z-index:999;font-size:20px;font-weight:bold;color:#0f766e}.login-box{max-width:420px;margin:70px auto;background:white;padding:24px;border-radius:14px;box-shadow:0 8px 25px rgba(0,0,0,.08)}.login-box h2{text-align:center;color:#0f766e;margin-bottom:16px}input,select,textarea,button{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}textarea{min-height:70px}button{border:0;background:#0f766e;color:white;font-weight:bold;cursor:pointer}button:hover{background:#115e59}.btn-secondary{background:#475569}.btn-danger{background:#dc2626}.btn-warning{background:#d97706}.btn-small{width:auto;padding:6px 9px;font-size:12px;margin:2px}header{background:#0f766e;color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}header h1{font-size:20px}.app{display:none}.layout{display:flex;min-height:calc(100vh - 64px)}nav{width:250px;background:#111827;color:white;padding:14px}nav button{background:transparent;border:0;color:white;text-align:left;margin-bottom:5px;border-radius:8px;padding:12px}nav button.active,nav button:hover{background:#0f766e}main{flex:1;padding:20px;overflow:auto}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}.card{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:14px}.card h2{margin-bottom:12px}.card h3{font-size:14px;color:#64748b;margin-bottom:8px}.value{font-size:25px;font-weight:bold;color:#0f766e}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}label{font-size:13px;font-weight:bold;color:#374151;margin-bottom:5px;display:block}.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.top-actions button{width:auto}table{width:100%;border-collapse:collapse;margin-top:12px;background:white;border-radius:12px;overflow:hidden}th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left;font-size:13px;vertical-align:top}th{background:#e0f2f1;color:#064e3b}.note{background:#fff7ed;border-left:4px solid #f97316;padding:10px;margin:10px 0;border-radius:8px;color:#7c2d12}.status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold;background:#e5e7eb}.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px}.modal .card{max-width:680px;margin:35px auto}.receipt{max-width:720px;margin:auto;background:white;padding:22px;border:1px solid #222;color:#111}.receipt h2{text-align:center}.receipt .row{display:flex;justify-content:space-between;margin:8px 0}.receipt table th,.receipt table td{border:1px solid #222}.portal-link{background:#334155}@media(max-width:800px){.layout{flex-direction:column}nav{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}main{padding:12px}}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}body{background:#f4f7fb;color:#1f2937}.hidden{display:none!important}.loading{position:fixed;inset:0;background:rgba(255,255,255,.75);display:none;align-items:center;justify-content:center;z-index:999;font-size:20px;font-weight:bold;color:#0f766e}.login-box{max-width:420px;margin:70px auto;background:white;padding:24px;border-radius:14px;box-shadow:0 8px 25px rgba(0,0,0,.08)}.login-box h2{text-align:center;color:#0f766e;margin-bottom:16px}input,select,textarea,button{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}textarea{min-height:70px}button{border:0;background:#0f766e;color:white;font-weight:bold;cursor:pointer}button:hover{background:#115e59}.btn-secondary{background:#475569}.btn-danger{background:#dc2626}.btn-warning{background:#d97706}.btn-small{width:auto;padding:6px 9px;font-size:12px;margin:2px}header{background:#0f766e;color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}header h1{font-size:20px}.app{display:none}.layout{display:flex;min-height:calc(100vh - 64px)}nav{width:250px;background:#111827;color:white;padding:14px}nav button{background:transparent;border:0;color:white;text-align:left;margin-bottom:5px;border-radius:8px;padding:12px}nav button.active,nav button:hover{background:#0f766e}main{flex:1;padding:20px;overflow:auto}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}.card{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:14px}.card h2{margin-bottom:12px}.card h3{font-size:14px;color:#64748b;margin-bottom:8px}.value{font-size:25px;font-weight:bold;color:#0f766e}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}label{font-size:13px;font-weight:bold;color:#374151;margin-bottom:5px;display:block}.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.top-actions button{width:auto}table{width:100%;border-collapse:collapse;margin-top:12px;background:white;border-radius:12px;overflow:hidden}th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left;font-size:13px;vertical-align:top}th{background:#e0f2f1;color:#064e3b}.note{background:#fff7ed;border-left:4px solid #f97316;padding:10px;margin:10px 0;border-radius:8px;color:#7c2d12}.status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold;background:#e5e7eb}.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px;overflow:auto}.modal .card{max-width:680px;margin:35px auto}.receipt{max-width:720px;margin:auto;background:white;padding:22px;border:1px solid #222;color:#111}.receipt h2{text-align:center}.receipt .row{display:flex;justify-content:space-between;margin:8px 0}.receipt table th,.receipt table td{border:1px solid #222}.portal-link{background:#334155}@media(max-width:800px){.layout{flex-direction:column}nav{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}main{padding:12px}}
 @media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}.no-print{display:none!important}}
 </style>
 </head>
@@ -21,19 +21,20 @@
   </div>
 </div>
 <div id="app" class="app">
-<header><h1>Fee Management ERP</h1><div><span id="userInfo"></span> <button class="btn-secondary btn-small" onclick="location.href='index.html'">ERP Home</button> <button class="btn-secondary btn-small" onclick="logout()">Logout</button></div></header>
+<header><h1>Fee Management ERP</h1><div><span id="userInfo"></span> <button class="btn-secondary btn-small" onclick="refresh()">Refresh</button> <button class="btn-secondary btn-small" onclick="location.href='index.html'">ERP Home</button> <button class="btn-secondary btn-small" onclick="logout()">Logout</button></div></header>
 <div class="layout"><nav>
 <button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
 <button onclick="showSection('students',this)">Students</button>
 <button class="admin-only" onclick="showSection('masters',this)">Branches / Courses</button>
 <button class="admin-only" onclick="showSection('structure',this)">Fee Structure</button>
-<button onclick="showSection('migration',this)">Opening / Imported</button>
+<button onclick="showSection('migration',this)">Old Fees</button>
 <button onclick="showSection('collection',this)">Fee Collection</button>
 <button onclick="showSection('receipts',this)">Receipts</button>
 <button onclick="showSection('reports',this)">Reports</button>
 </nav><main>
 <section id="dashboard" class="section active">
 <div class="grid"><div class="card"><h3>Total Students</h3><div class="value" id="dashStudents">0</div></div><div class="card"><h3>Today's Collection</h3><div class="value" id="dashToday">₹0</div></div><div class="card"><h3>This Month</h3><div class="value" id="dashMonth">₹0</div></div><div class="card"><h3>Total Balance</h3><div class="value" id="dashBalance">₹0</div></div></div>
+<div class="card"><h2>Course-wise Summary</h2><div class="form-grid"><select id="dashBranchFilter" onchange="renderDashboard()"></select><input id="dashAY" placeholder="Academic Year (blank = all)" oninput="renderDashboard()"></div><table id="dashCourseTable"></table></div>
 <div class="card"><h2>Branch-wise Summary</h2><table id="dashBranchTable"></table></div>
 </section>
 <section id="students" class="section">
@@ -43,12 +44,34 @@
 </section>
 <section id="masters" class="section"><div class="grid"><div class="card"><h2>Add Branch</h2><input id="newBranch" placeholder="Branch"><div class="top-actions"><button onclick="addBranch()">Add Branch</button></div><table id="branchTable"></table></div><div class="card"><h2>Add Course</h2><label>Branch</label><select id="courseBranch"></select><label>Course</label><input id="newCourse"><label>Duration Years</label><input type="number" id="newDuration"><div class="top-actions"><button onclick="addCourse()">Add Course</button></div><table id="courseTable"></table></div></div></section>
 <section id="structure" class="section"><div class="card"><h2>Fee Structure</h2><div class="form-grid"><div><label>Academic Year</label><input id="fsAY" placeholder="2026-27"></div><div><label>Branch</label><select id="fsBranch" onchange="loadCourseOptions(fsBranch,fsCourse,true)"></select></div><div><label>Course</label><select id="fsCourse"></select></div><div><label>Year No</label><select id="fsYear"><option>1</option><option>2</option><option>3</option></select></div><div><label>College Fee</label><input type="number" id="fsCollege"></div><div><label>Hostel Fee</label><input type="number" id="fsHostel"></div><div><label>Other Fee</label><input type="number" id="fsOther"></div><div><label>Active</label><select id="fsActive"><option>YES</option><option>NO</option></select></div><div style="grid-column:1/-1"><label>Remarks</label><textarea id="fsRemarks"></textarea></div></div><div class="top-actions"><button onclick="saveFeeStructure()">Save Structure</button></div></div><div class="card"><h2>Existing Fee Structures</h2><table id="structureTable"></table></div></section>
-<section id="migration" class="section"><div class="grid"><div class="card"><h2>Opening Balance</h2><div class="form-grid"><input id="obAdm" placeholder="Admission No"><input id="obAY" placeholder="Academic Year"><select id="obYear"><option>1</option><option>2</option><option>3</option></select><input type="number" id="obAmount" placeholder="Opening Balance"></div><textarea id="obRemarks" placeholder="Remarks"></textarea><div class="top-actions"><button onclick="saveOpeningBalance()">Save Opening Balance</button></div></div><div class="card"><h2>Imported Payment</h2><div class="form-grid"><input id="impAdm" placeholder="Admission No"><input id="impAY" placeholder="Academic Year"><select id="impYear"><option>1</option><option>2</option><option>3</option></select><input type="number" id="impAmount" placeholder="Imported Paid Amount"><select id="impMode"><option>Cash</option><option>GPay</option><option>PhonePe</option><option>Bank Transfer</option><option>Cheque</option></select><input id="impRef" placeholder="Reference No"></div><textarea id="impRemarks" placeholder="Remarks"></textarea><div class="top-actions"><button onclick="saveImportedPayment()">Save Imported Payment</button></div></div></div><div class="card"><h2>Migration Records</h2><table id="migrationTable"></table></div></section>
+
+<section id="migration" class="section">
+<div class="card"><h2>Old Fees — One Page Entry</h2>
+<div class="note">For old / already studying students: search the student, click <b>Add Old Fee</b> on the year, then type <b>Old Fee Due</b> and <b>Already Paid</b> together. Both save in one click and the balance updates instantly.</div>
+<div class="form-grid"><input id="oldSearch" placeholder="Search by Admission No / Student Name / Mobile" onkeydown="if(event.key==='Enter') searchOldStudent()"><button onclick="searchOldStudent()">Search Student</button></div>
+<div id="oldSearchResults"></div>
+<div id="oldStudentBox"></div>
+<table id="oldYearTable"></table>
+</div>
+<div class="card"><h2>Old Fee Records (Old Due + Old Paid)</h2><table id="migrationTable"></table></div>
+</section>
+
 <section id="collection" class="section"><div class="card"><h2>Fee Collection</h2><div class="form-grid"><input id="collectSearch" placeholder="Search by Admission No / Student Name / Mobile" onkeydown="if(event.key==='Enter') searchCollectionStudent()"><button onclick="searchCollectionStudent()">Search Student</button></div><div class="note">You can search using Admission No, Student Name, or Mobile Number.</div><div id="collectSearchResults"></div><div id="collectStudentBox"></div><table id="yearFeeTable"></table></div></section>
 <section id="receipts" class="section"><div class="card"><h2>Receipt Register</h2><div class="form-grid"><input id="receiptSearch" oninput="renderReceipts()" placeholder="Search receipt/admission/name"><input id="receiptFrom" type="date" onchange="renderReceipts()"><input id="receiptTo" type="date" onchange="renderReceipts()"></div><table id="receiptsTable"></table></div></section>
 <section id="reports" class="section"><div class="card"><h2>Reports</h2><div class="form-grid"><select id="repBranch" onchange="renderReports()"></select><select id="repCourse" onchange="renderReports()"></select><input id="repAY" placeholder="Academic Year" oninput="renderReports()"><select id="repHostel" onchange="renderReports()"><option value="">All Hostel</option><option>Yes</option><option>No</option></select></div><h3>Due Report</h3><table id="dueReportTable"></table><h3 style="margin-top:20px">Collection Report</h3><table id="collectionReportTable"></table></div></section>
 </main></div></div>
+
 <div id="payModal" class="modal hidden"><div class="card"><h2>Collect Payment</h2><input type="hidden" id="payAdm"><input type="hidden" id="payAY"><input type="hidden" id="payYear"><div class="note" id="payNote"></div><div class="form-grid"><div><label>Fee Head</label><select id="payHead"><option>College Fee</option><option>Hostel Fee</option><option>Other Fee</option><option>General Fee</option></select></div><div><label>Amount</label><input type="number" id="payAmount"></div><div><label>Payment Mode</label><select id="payMode"><option>Cash</option><option>GPay</option><option>PhonePe</option><option>Bank Transfer</option><option>Cheque</option></select></div><div><label>Reference No</label><input id="payRef"></div><div><label>Date</label><input type="date" id="payDate"></div></div><label>Remarks</label><textarea id="payRemarks"></textarea><div class="top-actions"><button onclick="collectPayment()">Generate Receipt</button><button class="btn-secondary" onclick="payModal.classList.add('hidden')">Cancel</button></div></div></div>
+
+<div id="oldModal" class="modal hidden"><div class="card"><h2>Add Old Fee (Due + Paid Together)</h2><input type="hidden" id="oldAdm"><input type="hidden" id="oldAY"><input type="hidden" id="oldYear"><div class="note" id="oldNote"></div><div class="form-grid">
+<div><label>Old Fee Due (Opening Balance)</label><input type="number" id="oldDue" placeholder="0"></div>
+<div><label>Already Paid (Old Payment)</label><input type="number" id="oldPaid" placeholder="0"></div>
+<div><label>Payment Mode (for old paid)</label><select id="oldMode"><option>Cash</option><option>GPay</option><option>PhonePe</option><option>Bank Transfer</option><option>Cheque</option></select></div>
+<div><label>Reference No</label><input id="oldRef"></div>
+</div><label>Remarks</label><textarea id="oldRemarks" placeholder="Old record migration"></textarea>
+<div class="note">Leave a box as 0 if not needed. Example: ₹20,000 old due and ₹12,000 already paid → enter both, balance shows ₹8,000 automatically.</div>
+<div class="top-actions"><button onclick="saveOldEntry()">Save Old Fee</button><button class="btn-secondary" onclick="oldModal.classList.add('hidden')">Cancel</button></div></div></div>
+
 <div id="receiptModal" class="modal hidden"><div class="card" style="max-width:800px"><div id="receiptPrint" class="receipt print-area"></div><div class="top-actions no-print"><button onclick="window.print()">Print</button><button class="btn-secondary" onclick="receiptModal.classList.add('hidden')">Close</button></div></div></div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbwrNkDWt-XpCFxAoNGzAmykTEq-PyrcuZpoYSp2WRDL1bh9kRj7575IeFbLSRnf564k/exec';
@@ -59,9 +82,10 @@ function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN')}function t
 async function login(){try{const j=await api('login',{username:loginUser.value.trim(),password:loginPass.value.trim()});token=j.token;currentUser=j.user;localStorage.setItem('FEE_TOKEN',token);localStorage.setItem('FEE_USER',JSON.stringify(currentUser));loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';await refresh();applyRole();}catch(e){alert(e.message)}}
 function logout(){token='';currentUser=null;localStorage.removeItem('FEE_TOKEN');localStorage.removeItem('FEE_USER');app.style.display='none';loginPage.style.display='block'}
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
-async function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');if(token){try{const j=await api('getInit');db=j.data}catch(e){console.log(e.message)}}renderAll()}
+/* FAST: switching tabs no longer re-downloads the whole sheet. Data reloads only on save or the Refresh button. */
+function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
 function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()))}
-function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderReceipts();renderReports();}
+function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderReceipts();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
 function loadCourseOptions(branchSel,courseSel,preserve=true){const old=courseSel.value;const br=branchSel.value;const list=db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course);courseSel.innerHTML=list.map(c=>`<option>${c}</option>`).join('');if(preserve&&list.includes(old))courseSel.value=old}
 function fillDurationFromCourse(){const c=db.courses.find(x=>x.Branch===stBranch.value&&x.Course===stCourse.value);if(c)stDuration.value=c.DurationYears||''}
 function studentByAdm(a){return db.students.find(s=>String(s.AdmissionNo)===String(a))}
@@ -71,10 +95,52 @@ function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.Ad
 function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
 function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
 function calcYear(st,year){const ay=ayFor(st.AcademicYear,year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-imp-paid);return {ay,total,op,imp,paid,balance,fs}}
-function renderDashboard(){dashStudents.textContent=db.students.length;const d=today(),m=d.slice(0,7);dashToday.textContent=money(db.payments.filter(p=>p.Date===d).reduce((s,p)=>s+Number(p.Amount||0),0));dashMonth.textContent=money(db.payments.filter(p=>String(p.Date).slice(0,7)===m).reduce((s,p)=>s+Number(p.Amount||0),0));let bal=0;db.students.forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++)bal+=calcYear(st,y).balance});dashBalance.textContent=money(bal);const map={};db.students.forEach(st=>{if(!map[st.Branch])map[st.Branch]={students:0,balance:0};map[st.Branch].students++;for(let y=1;y<=Number(st.CourseDuration||1);y++)map[st.Branch].balance+=calcYear(st,y).balance});let rows='<tr><th>Branch</th><th>Students</th><th>Balance</th></tr>';Object.keys(map).forEach(b=>rows+=`<tr><td>${b}</td><td>${map[b].students}</td><td>${money(map[b].balance)}</td></tr>`);dashBranchTable.innerHTML=rows}
-function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button>${isAdmin()?`<button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
+function renderDashboard(){
+  dashStudents.textContent=db.students.length;
+  const d=today(),m=d.slice(0,7);
+  dashToday.textContent=money(db.payments.filter(p=>p.Date===d).reduce((s,p)=>s+Number(p.Amount||0),0));
+  dashMonth.textContent=money(db.payments.filter(p=>String(p.Date).slice(0,7)===m).reduce((s,p)=>s+Number(p.Amount||0),0));
+
+  const brFilter=(typeof dashBranchFilter!=='undefined'&&dashBranchFilter)?dashBranchFilter.value:'';
+  const ayFilter=(typeof dashAY!=='undefined'&&dashAY)?(dashAY.value||'').trim():'';
+
+  const course={},branch={};
+  let gTotal=0,gPaid=0,gPending=0;
+
+  db.students.forEach(st=>{
+    if(brFilter&&st.Branch!==brFilter)return;
+    const ck=st.Branch+' | '+st.Course;
+    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,paid:0,pending:0};
+    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,paid:0,pending:0};
+    course[ck].students++;branch[st.Branch].students++;
+    for(let y=1;y<=Number(st.CourseDuration||1);y++){
+      const c=calcYear(st,y);
+      if(ayFilter&&c.ay!==ayFilter)continue;
+      const tot=c.total+c.op, pd=c.imp+c.paid, pen=c.balance;
+      course[ck].total+=tot;course[ck].paid+=pd;course[ck].pending+=pen;
+      branch[st.Branch].total+=tot;branch[st.Branch].paid+=pd;branch[st.Branch].pending+=pen;
+      gTotal+=tot;gPaid+=pd;gPending+=pen;
+    }
+  });
+
+  dashBalance.textContent=money(gPending);
+
+  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Paid</th><th>Pending</th></tr>';
+  const cKeys=Object.keys(course).sort();
+  if(!cKeys.length){cRows+='<tr><td colspan="6">No students match this filter.</td></tr>'}
+  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
+  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  dashCourseTable.innerHTML=cRows;
+
+  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Paid</th><th>Pending</th></tr>';
+  const bKeys=Object.keys(branch).sort();
+  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
+  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  dashBranchTable.innerHTML=bRows;
+}
+function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button><button class="btn-warning btn-small" onclick="goOldFee('${s.AdmissionNo}')">Old Fee</button>${isAdmin()?`<button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
 function clearStudentForm(){['stAdmissionNo','stName','stDuration','stAcademicYear','stMobile','stRemarks'].forEach(id=>document.getElementById(id).value='');stCurrentYear.value='1';stHostel.value='No';stActive.value='YES'}
-function editStudent(adm){const s=studentByAdm(adm);if(!s)return;stAdmissionNo.value=s.AdmissionNo;stName.value=s.StudentName;stBranch.value=s.Branch;loadCourseOptions(stBranch,stCourse,false);stCourse.value=s.Course;stDuration.value=s.CourseDuration;stCurrentYear.value=s.CurrentYear;stAcademicYear.value=s.AcademicYear;stHostel.value=s.Hostel;stMobile.value=s.Mobile;stActive.value=s.Active;stRemarks.value=s.Remarks||'';showSection('students',document.querySelector("button[onclick*='students']"))}
+function editStudent(adm){const s=studentByAdm(adm);if(!s)return;stAdmissionNo.value=s.AdmissionNo;stName.value=s.StudentName;stBranch.value=s.Branch;loadCourseOptions(stBranch,stCourse,false);stCourse.value=s.Course;stDuration.value=s.CourseDuration;stCurrentYear.value=s.CurrentYear;stAcademicYear.value=s.AcademicYear;stHostel.value=s.Hostel;stMobile.value=s.Mobile;stActive.value=s.Active;stRemarks.value=s.Remarks||'';showSection('students',document.querySelector("nav button[onclick*='students']"))}
 async function saveStudent(){try{const p={AdmissionNo:stAdmissionNo.value,StudentName:stName.value,Branch:stBranch.value,Course:stCourse.value,CourseDuration:stDuration.value,CurrentYear:stCurrentYear.value,AcademicYear:stAcademicYear.value,Hostel:stHostel.value,Mobile:stMobile.value,Active:stActive.value,Remarks:stRemarks.value};const exists=studentByAdm(p.AdmissionNo);await api(exists?'updateStudent':'addStudent',p);await refresh();alert('Student saved')}catch(e){alert(e.message)}}
 async function deleteStudent(adm){if(confirm('Delete student?')){await api('deleteStudent',{admissionNo:adm});await refresh()}}
 async function bulkImportStudents(){try{const rows=bulkStudents.value.trim().split(/\n+/).filter(Boolean).map(line=>{const a=line.split(',');return {AdmissionNo:a[0],StudentName:a[1],Branch:a[2],Course:a[3],CourseDuration:a[4],CurrentYear:a[5],AcademicYear:a[6],Hostel:a[7],Mobile:a[8],Active:a[9]||'YES'}});const j=await api('bulkImportStudents',{students:rows});await refresh();alert(j.message)}catch(e){alert(e.message)}}
@@ -82,14 +148,71 @@ function renderMasters(){branchTable.innerHTML='<tr><th>Branch</th></tr>'+db.bra
 async function addBranch(){try{await api('addBranch',{branch:newBranch.value});newBranch.value='';await refresh()}catch(e){alert(e.message)}}async function addCourse(){try{await api('addCourse',{branch:courseBranch.value,course:newCourse.value,duration:newDuration.value});newCourse.value='';newDuration.value='';await refresh()}catch(e){alert(e.message)}}
 async function saveFeeStructure(){try{await api('saveFeeStructure',{AcademicYear:fsAY.value,Branch:fsBranch.value,Course:fsCourse.value,YearNo:fsYear.value,CollegeFee:fsCollege.value,HostelFee:fsHostel.value,OtherFee:fsOther.value,Active:fsActive.value,Remarks:fsRemarks.value});await refresh();alert('Fee structure saved')}catch(e){alert(e.message)}}
 function renderStructures(){let rows='<tr><th>Academic Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(f.TotalFee)}</td><td>${f.Active}</td></tr>`);structureTable.innerHTML=rows}
-async function saveOpeningBalance(){try{await api('saveOpeningBalance',{AdmissionNo:obAdm.value,AcademicYear:obAY.value,YearNo:obYear.value,OpeningBalance:obAmount.value,Remarks:obRemarks.value});await refresh();alert('Opening balance saved')}catch(e){alert(e.message)}}
-async function saveImportedPayment(){try{await api('saveImportedPayment',{AdmissionNo:impAdm.value,AcademicYear:impAY.value,YearNo:impYear.value,ImportedAmount:impAmount.value,PaymentMode:impMode.value,ReferenceNo:impRef.value,Remarks:impRemarks.value});await refresh();alert('Imported payment saved')}catch(e){alert(e.message)}}
-function renderMigration(){let rows='<tr><th>Type</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Remarks</th></tr>';db.openingBalances.forEach(x=>rows+=`<tr><td>Opening</td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.OpeningBalance)}</td><td>${x.Remarks||''}</td></tr>`);db.importedPayments.forEach(x=>rows+=`<tr><td>Imported</td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.ImportedAmount)}</td><td>${x.Remarks||''}</td></tr>`);migrationTable.innerHTML=rows}
+
+/* ===== OLD FEES: unified old due + old paid on one page ===== */
+let selectedOldAdm='';
+function goOldFee(adm){showSection('migration',document.querySelector("nav button[onclick*='migration']"));selectOldStudent(adm)}
+function searchOldStudent(){
+  const q=(oldSearch.value||'').trim().toLowerCase();
+  oldStudentBox.innerHTML='';oldYearTable.innerHTML='';selectedOldAdm='';
+  if(!q){alert('Enter Admission No, Student Name, or Mobile Number');return;}
+  const matches=db.students.filter(s=>
+    String(s.AdmissionNo||'').toLowerCase().includes(q) ||
+    String(s.StudentName||'').toLowerCase().includes(q) ||
+    String(s.Mobile||'').toLowerCase().includes(q)
+  );
+  if(matches.length===0){oldSearchResults.innerHTML='<div class="note">No student found</div>';return;}
+  if(matches.length===1){selectOldStudent(matches[0].AdmissionNo);return;}
+  let rows='<table><tr><th>Admission No</th><th>Name</th><th>Branch</th><th>Course</th><th>Academic Year</th><th>Mobile</th><th>Action</th></tr>';
+  matches.slice(0,50).forEach(s=>{
+    rows+=`<tr><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.AcademicYear}</td><td>${s.Mobile||''}</td><td><button class="btn-small" onclick="selectOldStudent('${s.AdmissionNo}')">Select</button></td></tr>`;
+  });
+  rows+='</table>';
+  if(matches.length>50) rows+='<div class="note">Showing first 50 matches. Type more letters to narrow search.</div>';
+  oldSearchResults.innerHTML=rows;
+}
+function selectOldStudent(admissionNo){
+  selectedOldAdm=String(admissionNo||'');
+  const st=studentByAdm(selectedOldAdm);
+  if(!st){alert('Student not found');return;}
+  oldSearch.value=st.AdmissionNo+' - '+st.StudentName;
+  oldSearchResults.innerHTML='';
+  renderOldStudent(st);
+}
+function renderOldStudent(st){
+  oldStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Current Year: ${st.CurrentYear} | Hostel: ${st.Hostel}</div>`;
+  let rows='<tr><th>Year</th><th>Academic Year</th><th>Structure Fee</th><th>Old Due</th><th>Old Paid</th><th>Receipt Paid</th><th>Balance Now</th><th>Action</th></tr>';
+  for(let y=1;y<=Number(st.CourseDuration||1);y++){
+    const c=calcYear(st,y);
+    rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td><b>${money(c.balance)}</b></td><td><button class="btn-warning btn-small" onclick="openOldEntry('${st.AdmissionNo}','${c.ay}',${y})">Add Old Fee</button></td></tr>`;
+  }
+  oldYearTable.innerHTML=rows;
+}
+function openOldEntry(adm,ay,year){
+  const st=studentByAdm(adm);if(!st)return;
+  oldAdm.value=adm;oldAY.value=ay;oldYear.value=year;
+  oldNote.textContent=st.StudentName+' ('+adm+') — '+ay+' Year '+year;
+  oldDue.value='';oldPaid.value='';oldRef.value='';oldRemarks.value='';oldMode.value='Cash';
+  oldModal.classList.remove('hidden');
+}
+async function saveOldEntry(){
+  const due=Number(oldDue.value||0),paid=Number(oldPaid.value||0);
+  if(due<=0&&paid<=0){alert('Enter Old Fee Due or Already Paid amount (at least one)');return;}
+  try{
+    await api('saveOldFee',{AdmissionNo:oldAdm.value,AcademicYear:oldAY.value,YearNo:oldYear.value,OldDue:due,OldPaid:paid,PaymentMode:oldMode.value,ReferenceNo:oldRef.value,Remarks:oldRemarks.value});
+    oldModal.classList.add('hidden');
+    await refresh();
+    alert('Old fee saved');
+  }catch(e){alert(e.message)}
+}
+function renderMigration(){let rows='<tr><th>Type</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Remarks</th></tr>';db.openingBalances.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Due</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.OpeningBalance)}</td><td>${x.Remarks||''}</td></tr>`);db.importedPayments.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Paid</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.ImportedAmount)}</td><td>${x.Remarks||''}</td></tr>`);migrationTable.innerHTML=rows}
+/* ===== END OLD FEES ===== */
+
 let selectedCollectionAdm='';
 function searchCollectionStudent(){
   const q=(collectSearch.value||'').trim().toLowerCase();
   collectStudentBox.innerHTML='';
-  yearFeeTable.innerHTML='';
+  yearFeeTable.innerHTML='';selectedCollectionAdm='';
   if(!q){alert('Enter Admission No, Student Name, or Mobile Number');return;}
   const matches=db.students.filter(s=>
     String(s.AdmissionNo||'').toLowerCase().includes(q) ||
@@ -118,11 +241,13 @@ function loadStudentForCollection(){
   if(selectedCollectionAdm){selectStudentForCollection(selectedCollectionAdm);return;}
   searchCollectionStudent();
 }
-function renderCollectionStudent(st){collectStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Opening</th><th>Imported</th><th>Receipt Paid</th><th>Balance</th><th>Action</th></tr>';for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td>${money(c.balance)}</td><td>${c.balance>0?`<button class="btn-warning btn-small" onclick="openPay('${st.AdmissionNo}','${c.ay}',${y},${c.balance})">Pay</button>`:'-'}</td></tr>`}yearFeeTable.innerHTML=rows}
+function renderCollectionStudent(st){collectStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Old Due</th><th>Old Paid</th><th>Receipt Paid</th><th>Balance</th><th>Action</th></tr>';for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td>${money(c.balance)}</td><td>${c.balance>0?`<button class="btn-warning btn-small" onclick="openPay('${st.AdmissionNo}','${c.ay}',${y},${c.balance})">Pay</button>`:'-'}</td></tr>`}yearFeeTable.innerHTML=rows}
 function openPay(adm,ay,year,balance){payAdm.value=adm;payAY.value=ay;payYear.value=year;payNote.textContent='Balance for '+ay+' Year '+year+': '+money(balance);payAmount.value=balance;payAmount.max=balance;payDate.value=db.serverDate||today();payModal.classList.remove('hidden')}
 async function collectPayment(){try{const j=await api('collectFee',{AdmissionNo:payAdm.value,AcademicYear:payAY.value,YearNo:payYear.value,FeeHead:payHead.value,Amount:payAmount.value,PaymentMode:payMode.value,ReferenceNo:payRef.value,Date:payDate.value,Remarks:payRemarks.value});payModal.classList.add('hidden');await refresh();showReceipt(j.receiptNo);loadStudentForCollection()}catch(e){alert(e.message)}}
 function showReceipt(no){const r=db.receipts.find(x=>String(x.ReceiptNo)===String(no));if(!r)return;receiptPrint.innerHTML=`<h2>Sri Vivekananda Educational Institutions</h2><h3 style="text-align:center">Fee Receipt</h3><div class="row"><b>Receipt No:</b><span>${r.ReceiptNo}</span></div><div class="row"><b>Date:</b><span>${r.Date}</span></div><div class="row"><b>Admission No:</b><span>${r.AdmissionNo}</span></div><div class="row"><b>Student:</b><span>${r.StudentName}</span></div><div class="row"><b>Branch/Course:</b><span>${r.Branch} / ${r.Course}</span></div><div class="row"><b>Academic Year:</b><span>${r.AcademicYear} - Year ${r.YearNo}</span></div><table><tr><th>Fee Head</th><th>Amount</th><th>Mode</th><th>Reference</th></tr><tr><td>${r.FeeHead}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td><td>${r.ReferenceNo||''}</td></tr></table><br><div class="row"><span>Received By: ${r.EnteredBy||''}</span><span>Signature</span></div>`;receiptModal.classList.remove('hidden')}
 function renderReceipts(){const q=(receiptSearch.value||'').toLowerCase(),f=receiptFrom.value,t=receiptTo.value;const list=db.receipts.filter(r=>(!q||String(r.ReceiptNo).toLowerCase().includes(q)||String(r.AdmissionNo).toLowerCase().includes(q)||String(r.StudentName).toLowerCase().includes(q))&&(!f||r.Date>=f)&&(!t||r.Date<=t));let rows='<tr><th>Action</th><th>Receipt</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Mode</th></tr>';list.slice().reverse().forEach(r=>rows+=`<tr><td><button class="btn-small" onclick="showReceipt('${r.ReceiptNo}')">Print</button></td><td>${r.ReceiptNo}</td><td>${r.Date}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.AcademicYear}</td><td>${r.YearNo}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);receiptsTable.innerHTML=rows}
 function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
+/* auto-login if token exists */
+if(token&&currentUser){loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';refresh().then(applyRole).catch(()=>logout())}
 </script>
 </body></html>
