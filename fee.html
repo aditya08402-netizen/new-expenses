@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fee Management ERP</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}body{background:#f4f7fb;color:#1f2937}.hidden{display:none!important}.loading{position:fixed;inset:0;background:rgba(255,255,255,.75);display:none;align-items:center;justify-content:center;z-index:999;font-size:20px;font-weight:bold;color:#0f766e}.login-box{max-width:420px;margin:70px auto;background:white;padding:24px;border-radius:14px;box-shadow:0 8px 25px rgba(0,0,0,.08)}.login-box h2{text-align:center;color:#0f766e;margin-bottom:16px}input,select,textarea,button{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}textarea{min-height:70px}button{border:0;background:#0f766e;color:white;font-weight:bold;cursor:pointer}button:hover{background:#115e59}.btn-secondary{background:#475569}.btn-danger{background:#dc2626}.btn-warning{background:#d97706}.btn-small{width:auto;padding:6px 9px;font-size:12px;margin:2px}header{background:#0f766e;color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}header h1{font-size:20px}.app{display:none}.layout{display:flex;min-height:calc(100vh - 64px)}nav{width:250px;background:#111827;color:white;padding:14px}nav button{background:transparent;border:0;color:white;text-align:left;margin-bottom:5px;border-radius:8px;padding:12px}nav button.active,nav button:hover{background:#0f766e}main{flex:1;padding:20px;overflow:auto}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}.card{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:14px}.card h2{margin-bottom:12px}.card h3{font-size:14px;color:#64748b;margin-bottom:8px}.value{font-size:25px;font-weight:bold;color:#0f766e}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}label{font-size:13px;font-weight:bold;color:#374151;margin-bottom:5px;display:block}.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.top-actions button{width:auto}table{width:100%;border-collapse:collapse;margin-top:12px;background:white;border-radius:12px;overflow:hidden}th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left;font-size:13px;vertical-align:top}th{background:#e0f2f1;color:#064e3b}.note{background:#fff7ed;border-left:4px solid #f97316;padding:10px;margin:10px 0;border-radius:8px;color:#7c2d12}.status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold;background:#e5e7eb}.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px;overflow:auto}.modal .card{max-width:680px;margin:35px auto}.receipt{max-width:720px;margin:auto;background:white;padding:22px;border:1px solid #222;color:#111}.receipt h2{text-align:center}.receipt .row{display:flex;justify-content:space-between;margin:8px 0}.receipt table th,.receipt table td{border:1px solid #222}.portal-link{background:#334155}@media(max-width:800px){.layout{flex-direction:column}nav{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}main{padding:12px}}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}body{background:#f4f7fb;color:#1f2937}.hidden{display:none!important}.loading{position:fixed;inset:0;background:rgba(255,255,255,.75);display:none;align-items:center;justify-content:center;z-index:999;font-size:20px;font-weight:bold;color:#0f766e}.login-box{max-width:420px;margin:70px auto;background:white;padding:24px;border-radius:14px;box-shadow:0 8px 25px rgba(0,0,0,.08)}.login-box h2{text-align:center;color:#0f766e;margin-bottom:16px}input,select,textarea,button{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}textarea{min-height:70px}button{border:0;background:#0f766e;color:white;font-weight:bold;cursor:pointer}button:hover{background:#115e59}.btn-secondary{background:#475569}.btn-danger{background:#dc2626}.btn-warning{background:#d97706}.btn-small{width:auto;padding:6px 9px;font-size:12px;margin:2px}header{background:#0f766e;color:white;padding:16px 22px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}header h1{font-size:20px}.app{display:none}.layout{display:flex;min-height:calc(100vh - 64px)}nav{width:250px;background:#111827;color:white;padding:14px}nav button{background:transparent;border:0;color:white;text-align:left;margin-bottom:5px;border-radius:8px;padding:12px}nav button.active,nav button:hover{background:#0f766e}main{flex:1;padding:20px;overflow:auto}.section{display:none}.section.active{display:block}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:16px}.card{background:white;border-radius:14px;padding:18px;box-shadow:0 4px 14px rgba(0,0,0,.06);margin-bottom:14px}.card h2{margin-bottom:12px}.card h3{font-size:14px;color:#64748b;margin-bottom:8px}.value{font-size:25px;font-weight:bold;color:#0f766e}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}label{font-size:13px;font-weight:bold;color:#374151;margin-bottom:5px;display:block}.top-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.top-actions button{width:auto}table{width:100%;border-collapse:collapse;margin-top:12px;background:white;border-radius:12px;overflow:hidden}th,td{border-bottom:1px solid #e5e7eb;padding:10px;text-align:left;font-size:13px;vertical-align:top}th{background:#e0f2f1;color:#064e3b}.note{background:#fff7ed;border-left:4px solid #f97316;padding:10px;margin:10px 0;border-radius:8px;color:#7c2d12}.status{display:inline-block;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold;background:#e5e7eb}.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99;padding:20px;overflow:auto}.modal .card{max-width:680px;margin:35px auto}.receipt{max-width:720px;margin:auto;background:white;padding:22px;border:1px solid #222;color:#111;position:relative;overflow:hidden}.watermark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.watermark span{transform:rotate(-28deg);font-size:46px;font-weight:bold;color:#0f766e;opacity:.12;letter-spacing:5px;white-space:nowrap;text-align:center;line-height:1.2}.watermark img{max-width:65%;max-height:65%;opacity:.12}.receipt>*:not(.watermark){position:relative;z-index:1}.receipt h2{text-align:center}.receipt .row{display:flex;justify-content:space-between;margin:8px 0}.receipt table th,.receipt table td{border:1px solid #222}.portal-link{background:#334155}@media(max-width:800px){.layout{flex-direction:column}nav{width:100%;display:grid;grid-template-columns:repeat(2,1fr);gap:6px}main{padding:12px}}
 @media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}.no-print{display:none!important}}
 </style>
 </head>
@@ -28,7 +28,9 @@
 <button class="admin-only" onclick="showSection('masters',this)">Branches / Courses</button>
 <button class="admin-only" onclick="showSection('structure',this)">Fee Structure</button>
 <button onclick="showSection('migration',this)">Old Fees</button>
+<button class="admin-only" onclick="showSection('discounts',this)">Discounts</button>
 <button onclick="showSection('collection',this)">Fee Collection</button>
+<button onclick="showSection('daybook',this)">Day Collection</button>
 <button onclick="showSection('receipts',this)">Receipts</button>
 <button onclick="showSection('reports',this)">Reports</button>
 </nav><main>
@@ -43,7 +45,7 @@
 <div class="card"><h2>Student List</h2><div class="form-grid"><input id="studentSearch" placeholder="Search admission/name/mobile" oninput="renderStudents()"><select id="studentBranchFilter" onchange="renderStudents()"></select><select id="studentCourseFilter" onchange="renderStudents()"></select><select id="studentHostelFilter" onchange="renderStudents()"><option value="">All Hostel</option><option>Yes</option><option>No</option></select></div><table id="studentsTable"></table></div>
 </section>
 <section id="masters" class="section"><div class="grid"><div class="card"><h2>Add Branch</h2><input id="newBranch" placeholder="Branch"><div class="top-actions"><button onclick="addBranch()">Add Branch</button></div><table id="branchTable"></table></div><div class="card"><h2>Add Course</h2><label>Branch</label><select id="courseBranch"></select><label>Course</label><input id="newCourse"><label>Duration Years</label><input type="number" id="newDuration"><div class="top-actions"><button onclick="addCourse()">Add Course</button></div><table id="courseTable"></table></div></div></section>
-<section id="structure" class="section"><div class="card"><h2>Fee Structure</h2><div class="form-grid"><div><label>Academic Year</label><input id="fsAY" placeholder="2026-27"></div><div><label>Branch</label><select id="fsBranch" onchange="loadCourseOptions(fsBranch,fsCourse,true)"></select></div><div><label>Course</label><select id="fsCourse"></select></div><div><label>Year No</label><select id="fsYear"><option>1</option><option>2</option><option>3</option></select></div><div><label>College Fee</label><input type="number" id="fsCollege"></div><div><label>Hostel Fee</label><input type="number" id="fsHostel"></div><div><label>Other Fee</label><input type="number" id="fsOther"></div><div><label>Active</label><select id="fsActive"><option>YES</option><option>NO</option></select></div><div style="grid-column:1/-1"><label>Remarks</label><textarea id="fsRemarks"></textarea></div></div><div class="top-actions"><button onclick="saveFeeStructure()">Save Structure</button></div></div><div class="card"><h2>Existing Fee Structures</h2><table id="structureTable"></table></div></section>
+<section id="structure" class="section"><div class="card"><h2>Fee Structure</h2><div class="note">Enter the <b>Batch Year</b> — the academic year the student joined (same as Admission Year in Student Master). This fee stays with that batch for their whole course, so 2025-26 joiners keep the 2025-26 fee in Year 2 and Year 3 even after new rates start.</div><div class="form-grid"><div><label>Batch Year (Admission Year)</label><input id="fsAY" placeholder="2026-27"></div><div><label>Branch</label><select id="fsBranch" onchange="loadCourseOptions(fsBranch,fsCourse,true)"></select></div><div><label>Course</label><select id="fsCourse"></select></div><div><label>Year No</label><select id="fsYear"><option>1</option><option>2</option><option>3</option></select></div><div><label>College Fee</label><input type="number" id="fsCollege"></div><div><label>Hostel Fee</label><input type="number" id="fsHostel"></div><div><label>Other Fee</label><input type="number" id="fsOther"></div><div><label>Active</label><select id="fsActive"><option>YES</option><option>NO</option></select></div><div><label>Same fee for all years</label><select id="fsAllYears"><option value="">No — only the Year No above</option><option value="1">Yes — apply to every year of the course</option></select></div><div style="grid-column:1/-1"><label>Remarks</label><textarea id="fsRemarks"></textarea></div></div><div class="top-actions"><button onclick="saveFeeStructure()">Save Structure</button></div></div><div class="card"><h2>Existing Fee Structures</h2><table id="structureTable"></table></div></section>
 
 <section id="migration" class="section">
 <div class="card"><h2>Old Fees — One Page Entry</h2>
@@ -56,7 +58,37 @@
 <div class="card"><h2>Old Fee Records (Old Due + Old Paid)</h2><table id="migrationTable"></table></div>
 </section>
 
+<section id="discounts" class="section">
+<div class="card"><h2>Student Discount</h2>
+<div class="note">Discount reduces the amount payable for that year. Only Admin can give or remove a discount. It shows on the Fee Collection screen and in the Due Report, so staff always collect the correct balance.</div>
+<div class="form-grid"><input id="disSearch" placeholder="Search by Admission No / Student Name / Mobile" onkeydown="if(event.key==='Enter') searchDiscountStudent()"><button onclick="searchDiscountStudent()">Search Student</button></div>
+<div id="disSearchResults"></div><div id="disStudentBox"></div><table id="disYearTable"></table>
+</div>
+<div class="card"><h2>Discounts Given</h2><div class="form-grid"><input id="disRegSearch" placeholder="Search admission / name / reason" oninput="renderDiscounts()"></div><table id="discountTable"></table></div>
+</section>
+
 <section id="collection" class="section"><div class="card"><h2>Fee Collection</h2><div class="form-grid"><input id="collectSearch" placeholder="Search by Admission No / Student Name / Mobile" onkeydown="if(event.key==='Enter') searchCollectionStudent()"><button onclick="searchCollectionStudent()">Search Student</button></div><div class="note">You can search using Admission No, Student Name, or Mobile Number.</div><div id="collectSearchResults"></div><div id="collectStudentBox"></div><table id="yearFeeTable"></table></div></section>
+<section id="daybook" class="section">
+<div class="card no-print"><h2>Day Collection</h2>
+<div class="note">Shows money collected on the selected date. Receipts and old imported payments are both included — use the Entry Type filter to see them separately.</div>
+<div class="form-grid">
+<div><label>From Date</label><input type="date" id="dayFrom" onchange="renderDay()"></div>
+<div><label>To Date</label><input type="date" id="dayTo" onchange="renderDay()"></div>
+<div><label>Branch</label><select id="dayBranch" onchange="renderDay()"></select></div>
+<div><label>Entered By</label><select id="dayUser" onchange="renderDay()"></select></div>
+<div><label>Entry Type</label><select id="dayType" onchange="renderDay()"><option value="">All</option><option>Receipt</option><option>Old Entry</option></select></div>
+</div>
+<div class="top-actions"><button class="btn-small" onclick="setDay(0)">Today</button><button class="btn-small btn-secondary" onclick="setDay(-1)">Yesterday</button><button class="btn-small btn-secondary" onclick="setDay('month')">This Month</button><button class="btn-small btn-warning" onclick="printDay()">Print</button></div>
+</div>
+<div id="dayPrintArea">
+<div class="card"><h2 id="dayTitle">Day Collection</h2><div class="grid"><div class="card"><h3>Total Collection</h3><div class="value" id="dayTotal">₹0</div></div><div class="card"><h3>Receipts</h3><div class="value" id="dayCount">0</div></div><div class="card"><h3>Students Paid</h3><div class="value" id="dayStudents">0</div></div></div></div>
+<div class="card"><h2>Payment Mode Summary</h2><table id="dayModeTable"></table></div>
+<div class="card"><h2>User-wise Entry</h2><table id="dayUserTable"></table></div>
+<div class="card"><h2>Branch-wise Collection</h2><table id="dayBranchTable"></table></div>
+<div class="card"><h2>Receipt Details</h2><table id="dayReceiptTable"></table></div>
+</div>
+</section>
+
 <section id="receipts" class="section"><div class="card"><h2>Receipt Register</h2><div class="form-grid"><input id="receiptSearch" oninput="renderReceipts()" placeholder="Search receipt/admission/name"><input id="receiptFrom" type="date" onchange="renderReceipts()"><input id="receiptTo" type="date" onchange="renderReceipts()"></div><table id="receiptsTable"></table></div></section>
 <section id="reports" class="section"><div class="card"><h2>Reports</h2><div class="form-grid"><select id="repBranch" onchange="renderReports()"></select><select id="repCourse" onchange="renderReports()"></select><input id="repAY" placeholder="Academic Year" oninput="renderReports()"><select id="repHostel" onchange="renderReports()"><option value="">All Hostel</option><option>Yes</option><option>No</option></select></div><h3>Due Report</h3><table id="dueReportTable"></table><h3 style="margin-top:20px">Collection Report</h3><table id="collectionReportTable"></table></div></section>
 </main></div></div>
@@ -72,10 +104,23 @@
 <div class="note">Leave a box as 0 if not needed. Example: ₹20,000 old due and ₹12,000 already paid → enter both, balance shows ₹8,000 automatically.</div>
 <div class="top-actions"><button onclick="saveOldEntry()">Save Old Fee</button><button class="btn-secondary" onclick="oldModal.classList.add('hidden')">Cancel</button></div></div></div>
 
+<div id="disModal" class="modal hidden"><div class="card"><h2>Give Discount</h2><input type="hidden" id="disAdm"><input type="hidden" id="disAY"><input type="hidden" id="disYear"><input type="hidden" id="disTotal"><div class="note" id="disNote"></div><div class="form-grid">
+<div><label>Discount Type</label><select id="disType" onchange="previewDiscount()"><option>Amount</option><option>Percent</option></select></div>
+<div><label id="disValueLabel">Discount Amount (₹)</label><input type="number" id="disValue" oninput="previewDiscount()"></div>
+<div><label>Reason</label><select id="disReason"><option>Merit</option><option>Sibling</option><option>Staff Ward</option><option>Financial Hardship</option><option>Management</option><option>Sports</option><option>Other</option></select></div>
+</div><label>Note</label><textarea id="disNoteText" placeholder="Approved by / reference"></textarea>
+<div class="note" id="disPreview">Enter a value to see the new balance.</div>
+<div class="top-actions"><button onclick="saveDiscount()">Save Discount</button><button class="btn-secondary" onclick="disModal.classList.add('hidden')">Cancel</button></div></div></div>
+
 <div id="receiptModal" class="modal hidden"><div class="card" style="max-width:800px"><div id="receiptPrint" class="receipt print-area"></div><div class="top-actions no-print"><button onclick="window.print()">Print</button><button class="btn-secondary" onclick="receiptModal.classList.add('hidden')">Close</button></div></div></div>
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbwrNkDWt-XpCFxAoNGzAmykTEq-PyrcuZpoYSp2WRDL1bh9kRj7575IeFbLSRnf564k/exec';
-let token=localStorage.getItem('FEE_TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('FEE_USER')||'null');let db={students:[],branches:[],courses:[],structures:[],openingBalances:[],importedPayments:[],payments:[],receipts:[],users:[],serverDate:''};
+/* Receipt watermark. Leave LOGO_URL blank to use the text watermark below.
+   To use your college logo instead, paste a direct image link (must end in .png / .jpg). */
+const LOGO_URL='';
+const WATERMARK_TEXT='SRI VIVEKANANDA';
+const RECEIPT_HEADER='SRI RAMAKRISHNA PARMAHAMSHA EDUCATIONAL SOCIETY';
+let token=localStorage.getItem('FEE_TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('FEE_USER')||'null');let db={students:[],branches:[],courses:[],structures:[],openingBalances:[],importedPayments:[],payments:[],receipts:[],discounts:[],users:[],serverDate:''};
 function showLoad(v){loading.style.display=v?'flex':'none'}
 async function api(action,payload={}){showLoad(true);try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,token})});const j=await r.json();if(!j.success)throw new Error(j.message||'Error');return j;}finally{showLoad(false)}}
 function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN')}function today(){return new Date().toISOString().slice(0,10)}function isAdmin(){return currentUser?.role==='Admin'}function opt(sel,arr,all=false){if(!sel)return;const old=sel.value;sel.innerHTML=(all?'<option value="">All</option>':'')+arr.map(x=>`<option>${x}</option>`).join('');if([...sel.options].some(o=>o.value===old))sel.value=old}
@@ -84,17 +129,29 @@ function logout(){token='';currentUser=null;localStorage.removeItem('FEE_TOKEN')
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 /* FAST: switching tabs no longer re-downloads the whole sheet. Data reloads only on save or the Refresh button. */
 function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
-function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()))}
-function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderReceipts();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
+function isStaff(){return isAdmin()||currentUser?.role==='Accountant'}
+function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.staff-only').forEach(e=>e.classList.toggle('hidden',!isStaff()))}
+function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;dayFrom.value=dayFrom.value||d;dayTo.value=dayTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(dayBranch,db.branches,true);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderDiscounts();renderDay();renderReceipts();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedDisAdm){const st=studentByAdm(selectedDisAdm);if(st)renderDiscountStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
 function loadCourseOptions(branchSel,courseSel,preserve=true){const old=courseSel.value;const br=branchSel.value;const list=db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course);courseSel.innerHTML=list.map(c=>`<option>${c}</option>`).join('');if(preserve&&list.includes(old))courseSel.value=old}
 function fillDurationFromCourse(){const c=db.courses.find(x=>x.Branch===stBranch.value&&x.Course===stCourse.value);if(c)stDuration.value=c.DurationYears||''}
 function studentByAdm(a){return db.students.find(s=>String(s.AdmissionNo)===String(a))}
 function ayFor(startAY,yearNo){const m=String(startAY||'').match(/(\d{4})/);if(!m)return startAY;const y=Number(m[1])+Number(yearNo||1)-1;return y+'-'+String((y+1)%100).padStart(2,'0')}
-function feeStructure(st,yearNo){const ay=ayFor(st.AcademicYear,yearNo);return db.structures.find(f=>f.AcademicYear===ay&&f.Branch===st.Branch&&f.Course===st.Course&&Number(f.YearNo)===Number(yearNo)&&String(f.Active).toUpperCase()!=='NO')||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0}}
+/* Fee follows the BATCH (admission year), not the running year.
+   A student admitted in 2025-26 keeps the 2025-26 batch fee for Year 1, 2, 3.
+   Falls back to the running-year structure so older entries still work.
+   Uses the LAST matching row, so re-saving a structure overrides the old one. */
+function feeStructure(st,yearNo){
+  const active=f=>String(f.Active).toUpperCase()!=='NO';
+  const pick=ay=>db.structures.filter(f=>f.AcademicYear===ay&&f.Branch===st.Branch&&f.Course===st.Course&&Number(f.YearNo)===Number(yearNo)&&active(f)).pop();
+  const batch=String(st.AcademicYear||'').trim();
+  const running=ayFor(st.AcademicYear,yearNo);
+  return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
+}
 function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
 function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
 function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
-function calcYear(st,year){const ay=ayFor(st.AcademicYear,year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-imp-paid);return {ay,total,op,imp,paid,balance,fs}}
+function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
+function calcYear(st,year){const ay=ayFor(st.AcademicYear,year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year), disc=discountFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-disc-imp-paid);return {ay,total,op,imp,paid,disc,balance,fs}}
 function renderDashboard(){
   dashStudents.textContent=db.students.length;
   const d=today(),m=d.slice(0,7);
@@ -105,40 +162,40 @@ function renderDashboard(){
   const ayFilter=(typeof dashAY!=='undefined'&&dashAY)?(dashAY.value||'').trim():'';
 
   const course={},branch={};
-  let gTotal=0,gPaid=0,gPending=0;
+  let gTotal=0,gDisc=0,gPaid=0,gPending=0;
 
   db.students.forEach(st=>{
     if(brFilter&&st.Branch!==brFilter)return;
     const ck=st.Branch+' | '+st.Course;
-    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,paid:0,pending:0};
-    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,paid:0,pending:0};
+    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,disc:0,paid:0,pending:0};
+    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,disc:0,paid:0,pending:0};
     course[ck].students++;branch[st.Branch].students++;
     for(let y=1;y<=Number(st.CourseDuration||1);y++){
       const c=calcYear(st,y);
       if(ayFilter&&c.ay!==ayFilter)continue;
-      const tot=c.total+c.op, pd=c.imp+c.paid, pen=c.balance;
-      course[ck].total+=tot;course[ck].paid+=pd;course[ck].pending+=pen;
-      branch[st.Branch].total+=tot;branch[st.Branch].paid+=pd;branch[st.Branch].pending+=pen;
-      gTotal+=tot;gPaid+=pd;gPending+=pen;
+      const tot=c.total+c.op, ds=c.disc, pd=c.imp+c.paid, pen=c.balance;
+      course[ck].total+=tot;course[ck].disc+=ds;course[ck].paid+=pd;course[ck].pending+=pen;
+      branch[st.Branch].total+=tot;branch[st.Branch].disc+=ds;branch[st.Branch].paid+=pd;branch[st.Branch].pending+=pen;
+      gTotal+=tot;gDisc+=ds;gPaid+=pd;gPending+=pen;
     }
   });
 
   dashBalance.textContent=money(gPending);
 
-  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Paid</th><th>Pending</th></tr>';
+  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Pending</th></tr>';
   const cKeys=Object.keys(course).sort();
-  if(!cKeys.length){cRows+='<tr><td colspan="6">No students match this filter.</td></tr>'}
-  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
-  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  if(!cKeys.length){cRows+='<tr><td colspan="7">No students match this filter.</td></tr>'}
+  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
+  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
   dashCourseTable.innerHTML=cRows;
 
-  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Paid</th><th>Pending</th></tr>';
+  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Pending</th></tr>';
   const bKeys=Object.keys(branch).sort();
-  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
-  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
+  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
   dashBranchTable.innerHTML=bRows;
 }
-function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button><button class="btn-warning btn-small" onclick="goOldFee('${s.AdmissionNo}')">Old Fee</button>${isAdmin()?`<button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
+function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button><button class="btn-warning btn-small" onclick="goOldFee('${s.AdmissionNo}')">Old Fee</button>${isAdmin()?`<button class="btn-small" onclick="goDiscount('${s.AdmissionNo}')">Discount</button><button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
 function clearStudentForm(){['stAdmissionNo','stName','stDuration','stAcademicYear','stMobile','stRemarks'].forEach(id=>document.getElementById(id).value='');stCurrentYear.value='1';stHostel.value='No';stActive.value='YES'}
 function editStudent(adm){const s=studentByAdm(adm);if(!s)return;stAdmissionNo.value=s.AdmissionNo;stName.value=s.StudentName;stBranch.value=s.Branch;loadCourseOptions(stBranch,stCourse,false);stCourse.value=s.Course;stDuration.value=s.CourseDuration;stCurrentYear.value=s.CurrentYear;stAcademicYear.value=s.AcademicYear;stHostel.value=s.Hostel;stMobile.value=s.Mobile;stActive.value=s.Active;stRemarks.value=s.Remarks||'';showSection('students',document.querySelector("nav button[onclick*='students']"))}
 async function saveStudent(){try{const p={AdmissionNo:stAdmissionNo.value,StudentName:stName.value,Branch:stBranch.value,Course:stCourse.value,CourseDuration:stDuration.value,CurrentYear:stCurrentYear.value,AcademicYear:stAcademicYear.value,Hostel:stHostel.value,Mobile:stMobile.value,Active:stActive.value,Remarks:stRemarks.value};const exists=studentByAdm(p.AdmissionNo);await api(exists?'updateStudent':'addStudent',p);await refresh();alert('Student saved')}catch(e){alert(e.message)}}
@@ -146,8 +203,23 @@ async function deleteStudent(adm){if(confirm('Delete student?')){await api('dele
 async function bulkImportStudents(){try{const rows=bulkStudents.value.trim().split(/\n+/).filter(Boolean).map(line=>{const a=line.split(',');return {AdmissionNo:a[0],StudentName:a[1],Branch:a[2],Course:a[3],CourseDuration:a[4],CurrentYear:a[5],AcademicYear:a[6],Hostel:a[7],Mobile:a[8],Active:a[9]||'YES'}});const j=await api('bulkImportStudents',{students:rows});await refresh();alert(j.message)}catch(e){alert(e.message)}}
 function renderMasters(){branchTable.innerHTML='<tr><th>Branch</th></tr>'+db.branches.map(b=>`<tr><td>${b}</td></tr>`).join('');courseTable.innerHTML='<tr><th>Branch</th><th>Course</th><th>Duration</th></tr>'+db.courses.map(c=>`<tr><td>${c.Branch}</td><td>${c.Course}</td><td>${c.DurationYears}</td></tr>`).join('')}
 async function addBranch(){try{await api('addBranch',{branch:newBranch.value});newBranch.value='';await refresh()}catch(e){alert(e.message)}}async function addCourse(){try{await api('addCourse',{branch:courseBranch.value,course:newCourse.value,duration:newDuration.value});newCourse.value='';newDuration.value='';await refresh()}catch(e){alert(e.message)}}
-async function saveFeeStructure(){try{await api('saveFeeStructure',{AcademicYear:fsAY.value,Branch:fsBranch.value,Course:fsCourse.value,YearNo:fsYear.value,CollegeFee:fsCollege.value,HostelFee:fsHostel.value,OtherFee:fsOther.value,Active:fsActive.value,Remarks:fsRemarks.value});await refresh();alert('Fee structure saved')}catch(e){alert(e.message)}}
-function renderStructures(){let rows='<tr><th>Academic Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(f.TotalFee)}</td><td>${f.Active}</td></tr>`);structureTable.innerHTML=rows}
+async function saveFeeStructure(){
+  try{
+    const base={AcademicYear:fsAY.value.trim(),Branch:fsBranch.value,Course:fsCourse.value,CollegeFee:fsCollege.value,HostelFee:fsHostel.value,OtherFee:fsOther.value,Active:fsActive.value,Remarks:fsRemarks.value};
+    if(!base.AcademicYear){alert('Enter the Batch Year (admission year)');return}
+    let years=[fsYear.value];
+    if(fsAllYears.value){
+      const c=db.courses.find(x=>x.Branch===base.Branch&&x.Course===base.Course);
+      const dur=Number(c&&c.DurationYears||0);
+      if(!dur){alert('Course duration not found. Add the course under Branches / Courses first.');return}
+      years=[];for(let y=1;y<=dur;y++)years.push(String(y));
+    }
+    for(const y of years) await api('saveFeeStructure',Object.assign({},base,{YearNo:y}));
+    await refresh();
+    alert(years.length>1?`Fee structure saved for Year 1 to ${years.length} of batch ${base.AcademicYear}`:'Fee structure saved');
+  }catch(e){alert(e.message)}
+}
+function renderStructures(){let rows='<tr><th>Batch Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(f.TotalFee)}</td><td>${f.Active}</td></tr>`);structureTable.innerHTML=rows}
 
 /* ===== OLD FEES: unified old due + old paid on one page ===== */
 let selectedOldAdm='';
@@ -208,6 +280,85 @@ async function saveOldEntry(){
 function renderMigration(){let rows='<tr><th>Type</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Remarks</th></tr>';db.openingBalances.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Due</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.OpeningBalance)}</td><td>${x.Remarks||''}</td></tr>`);db.importedPayments.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Paid</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.ImportedAmount)}</td><td>${x.Remarks||''}</td></tr>`);migrationTable.innerHTML=rows}
 /* ===== END OLD FEES ===== */
 
+/* ===== DISCOUNTS (Admin only) ===== */
+let selectedDisAdm='';
+function goDiscount(adm){showSection('discounts',document.querySelector("nav button[onclick*='discounts']"));selectDiscountStudent(adm)}
+function searchDiscountStudent(){
+  const q=(disSearch.value||'').trim().toLowerCase();
+  disStudentBox.innerHTML='';disYearTable.innerHTML='';selectedDisAdm='';
+  if(!q){alert('Enter Admission No, Student Name, or Mobile Number');return;}
+  const matches=db.students.filter(s=>
+    String(s.AdmissionNo||'').toLowerCase().includes(q) ||
+    String(s.StudentName||'').toLowerCase().includes(q) ||
+    String(s.Mobile||'').toLowerCase().includes(q)
+  );
+  if(matches.length===0){disSearchResults.innerHTML='<div class="note">No student found</div>';return;}
+  if(matches.length===1){selectDiscountStudent(matches[0].AdmissionNo);return;}
+  let rows='<table><tr><th>Admission No</th><th>Name</th><th>Branch</th><th>Course</th><th>Academic Year</th><th>Mobile</th><th>Action</th></tr>';
+  matches.slice(0,50).forEach(s=>rows+=`<tr><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.AcademicYear}</td><td>${s.Mobile||''}</td><td><button class="btn-small" onclick="selectDiscountStudent('${s.AdmissionNo}')">Select</button></td></tr>`);
+  rows+='</table>';
+  if(matches.length>50) rows+='<div class="note">Showing first 50 matches. Type more letters to narrow search.</div>';
+  disSearchResults.innerHTML=rows;
+}
+function selectDiscountStudent(adm){
+  selectedDisAdm=String(adm||'');
+  const st=studentByAdm(selectedDisAdm);
+  if(!st){alert('Student not found');return;}
+  disSearch.value=st.AdmissionNo+' - '+st.StudentName;
+  disSearchResults.innerHTML='';
+  renderDiscountStudent(st);
+}
+function renderDiscountStudent(st){
+  disStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Batch: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;
+  let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Balance</th><th>Action</th></tr>';
+  for(let y=1;y<=Number(st.CourseDuration||1);y++){
+    const c=calcYear(st,y);
+    rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp+c.paid)}</td><td><b>${money(c.balance)}</b></td><td><button class="btn-warning btn-small" onclick="openDiscount('${st.AdmissionNo}','${c.ay}',${y},${c.total+c.op})">Give Discount</button></td></tr>`;
+  }
+  disYearTable.innerHTML=rows;
+}
+function openDiscount(adm,ay,year,total){
+  const st=studentByAdm(adm);if(!st)return;
+  disAdm.value=adm;disAY.value=ay;disYear.value=year;disTotal.value=total;
+  disNote.textContent=st.StudentName+' ('+adm+') — '+ay+' Year '+year+' | Fee payable: '+money(total);
+  disValue.value='';disNoteText.value='';disType.value='Amount';disReason.value='Merit';
+  previewDiscount();
+  disModal.classList.remove('hidden');
+}
+function discountAmount(){
+  const total=Number(disTotal.value||0), v=Number(disValue.value||0);
+  return disType.value==='Percent'?Math.round(total*v/100):v;
+}
+function previewDiscount(){
+  disValueLabel.textContent=disType.value==='Percent'?'Discount Percent (%)':'Discount Amount (₹)';
+  const total=Number(disTotal.value||0), amt=discountAmount();
+  disPreview.textContent=amt>0?`Discount ${money(amt)} → new payable ${money(Math.max(0,total-amt))}`:'Enter a value to see the new balance.';
+}
+async function saveDiscount(){
+  const amt=discountAmount();
+  if(amt<=0){alert('Enter a valid discount');return}
+  if(amt>Number(disTotal.value||0)&&!confirm('Discount is more than the fee payable. Continue?'))return;
+  try{
+    await api('saveDiscount',{AdmissionNo:disAdm.value,AcademicYear:disAY.value,YearNo:disYear.value,DiscountType:disType.value,Amount:amt,Reason:(disReason.value+(disNoteText.value?' — '+disNoteText.value:''))});
+    disModal.classList.add('hidden');
+    await refresh();
+    alert('Discount saved');
+  }catch(e){alert(e.message)}
+}
+async function removeDiscount(id){
+  if(!confirm('Remove this discount?'))return;
+  try{await api('deleteDiscount',{ID:id});await refresh()}catch(e){alert(e.message)}
+}
+function renderDiscounts(){
+  const q=(disRegSearch.value||'').toLowerCase();
+  const list=(db.discounts||[]).filter(x=>!q||String(x.AdmissionNo).toLowerCase().includes(q)||String(x.StudentName).toLowerCase().includes(q)||String(x.Reason).toLowerCase().includes(q));
+  let rows='<tr><th>Action</th><th>Date</th><th>Adm No</th><th>Name</th><th>Course</th><th>AY</th><th>Year</th><th>Amount</th><th>Reason</th><th>By</th></tr>';
+  list.slice().reverse().forEach(x=>rows+=`<tr><td>${isAdmin()?`<button class="btn-danger btn-small" onclick="removeDiscount('${x.ID}')">Remove</button>`:''}</td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.Course}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.Amount)}</td><td>${x.Reason||''}</td><td>${x.EnteredBy||''}</td></tr>`);
+  rows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="7">TOTAL DISCOUNT</td><td>${money(list.reduce((s,x)=>s+Number(x.Amount||0),0))}</td><td colspan="2"></td></tr>`;
+  discountTable.innerHTML=rows;
+}
+/* ===== END DISCOUNTS ===== */
+
 let selectedCollectionAdm='';
 function searchCollectionStudent(){
   const q=(collectSearch.value||'').trim().toLowerCase();
@@ -241,12 +392,74 @@ function loadStudentForCollection(){
   if(selectedCollectionAdm){selectStudentForCollection(selectedCollectionAdm);return;}
   searchCollectionStudent();
 }
-function renderCollectionStudent(st){collectStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Old Due</th><th>Old Paid</th><th>Receipt Paid</th><th>Balance</th><th>Action</th></tr>';for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td>${money(c.balance)}</td><td>${c.balance>0?`<button class="btn-warning btn-small" onclick="openPay('${st.AdmissionNo}','${c.ay}',${y},${c.balance})">Pay</button>`:'-'}</td></tr>`}yearFeeTable.innerHTML=rows}
+function renderCollectionStudent(st){collectStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Old Due</th><th>Discount</th><th>Old Paid</th><th>Receipt Paid</th><th>Balance</th><th>Action</th></tr>';for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td>${money(c.balance)}</td>`+`<td>${c.balance>0?`<button class="btn-warning btn-small" onclick="openPay('${st.AdmissionNo}','${c.ay}',${y},${c.balance})">Pay</button>`:'-'}</td></tr>`}yearFeeTable.innerHTML=rows}
 function openPay(adm,ay,year,balance){payAdm.value=adm;payAY.value=ay;payYear.value=year;payNote.textContent='Balance for '+ay+' Year '+year+': '+money(balance);payAmount.value=balance;payAmount.max=balance;payDate.value=db.serverDate||today();payModal.classList.remove('hidden')}
 async function collectPayment(){try{const j=await api('collectFee',{AdmissionNo:payAdm.value,AcademicYear:payAY.value,YearNo:payYear.value,FeeHead:payHead.value,Amount:payAmount.value,PaymentMode:payMode.value,ReferenceNo:payRef.value,Date:payDate.value,Remarks:payRemarks.value});payModal.classList.add('hidden');await refresh();showReceipt(j.receiptNo);loadStudentForCollection()}catch(e){alert(e.message)}}
-function showReceipt(no){const r=db.receipts.find(x=>String(x.ReceiptNo)===String(no));if(!r)return;receiptPrint.innerHTML=`<h2>Sri Vivekananda Educational Institutions</h2><h3 style="text-align:center">Fee Receipt</h3><div class="row"><b>Receipt No:</b><span>${r.ReceiptNo}</span></div><div class="row"><b>Date:</b><span>${r.Date}</span></div><div class="row"><b>Admission No:</b><span>${r.AdmissionNo}</span></div><div class="row"><b>Student:</b><span>${r.StudentName}</span></div><div class="row"><b>Branch/Course:</b><span>${r.Branch} / ${r.Course}</span></div><div class="row"><b>Academic Year:</b><span>${r.AcademicYear} - Year ${r.YearNo}</span></div><table><tr><th>Fee Head</th><th>Amount</th><th>Mode</th><th>Reference</th></tr><tr><td>${r.FeeHead}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td><td>${r.ReferenceNo||''}</td></tr></table><br><div class="row"><span>Received By: ${r.EnteredBy||''}</span><span>Signature</span></div>`;receiptModal.classList.remove('hidden')}
+function showReceipt(no){const r=db.receipts.find(x=>String(x.ReceiptNo)===String(no));if(!r)return;const wm=LOGO_URL?`<div class="watermark"><img src="${LOGO_URL}" alt=""></div>`:`<div class="watermark"><span>${WATERMARK_TEXT}</span></div>`;receiptPrint.innerHTML=wm+`<h2>${RECEIPT_HEADER}</h2><h3 style="text-align:center">Fee Receipt</h3><div class="row"><b>Receipt No:</b><span>${r.ReceiptNo}</span></div><div class="row"><b>Date:</b><span>${r.Date}</span></div><div class="row"><b>Admission No:</b><span>${r.AdmissionNo}</span></div><div class="row"><b>Student:</b><span>${r.StudentName}</span></div><div class="row"><b>Branch/Course:</b><span>${r.Branch} / ${r.Course}</span></div><div class="row"><b>Academic Year:</b><span>${r.AcademicYear} - Year ${r.YearNo}</span></div><table><tr><th>Fee Head</th><th>Amount</th><th>Mode</th><th>Reference</th></tr><tr><td>${r.FeeHead}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td><td>${r.ReferenceNo||''}</td></tr></table><br><div class="row"><span>Received By: ${r.EnteredBy||''}</span><span>Signature</span></div>`;receiptModal.classList.remove('hidden')}
+/* ===== DAY COLLECTION (Admin + Accountant) ===== */
+const PAY_MODES=['Cash','GPay','PhonePe','Bank Transfer','Cheque'];
+function dayModes(list){const extra=[...new Set(list.map(r=>String(r.PaymentMode||'Other').trim()))].filter(m=>m&&!PAY_MODES.includes(m));return PAY_MODES.concat(extra)}
+function setDay(which){
+  const d=db.serverDate||today();
+  if(which===0){dayFrom.value=d;dayTo.value=d}
+  else if(which===-1){const y=new Date(d);y.setDate(y.getDate()-1);const s=y.toISOString().slice(0,10);dayFrom.value=s;dayTo.value=s}
+  else if(which==='month'){dayFrom.value=d.slice(0,8)+'01';dayTo.value=d}
+  renderDay();
+}
+function printDay(){const a=document.getElementById('dayPrintArea');a.classList.add('print-area');window.print();setTimeout(()=>a.classList.remove('print-area'),500)}
+function renderDay(){
+  if(typeof dayFrom==='undefined'||!dayFrom)return;
+  const f=dayFrom.value,t=dayTo.value,br=dayBranch.value,us=dayUser.value,ty=dayType.value;
+  const mode=v=>{const m=String(v||'').trim();return m||'Other'};
+  const fromReceipts=(db.receipts||[]).filter(r=>String(r.Cancelled||'').toUpperCase()!=='YES').map(r=>({Type:'Receipt',No:r.ReceiptNo,Date:r.Date,AdmissionNo:r.AdmissionNo,StudentName:r.StudentName,Branch:r.Branch,Course:r.Course,PaymentMode:mode(r.PaymentMode),ReferenceNo:r.ReferenceNo,EnteredBy:r.EnteredBy,Amount:Number(r.Amount||0)}));
+  const fromOld=(db.importedPayments||[]).map(x=>({Type:'Old Entry',No:x.ID,Date:x.Date,AdmissionNo:x.AdmissionNo,StudentName:x.StudentName,Branch:x.Branch,Course:x.Course,PaymentMode:mode(x.PaymentMode),ReferenceNo:x.ReferenceNo,EnteredBy:x.EnteredBy,Amount:Number(x.ImportedAmount||0)}));
+  const all=fromReceipts.concat(fromOld);
+  opt(dayUser,[...new Set(all.map(r=>String(r.EnteredBy||'').trim()).filter(Boolean))].sort(),true);
+  const list=all.filter(r=>(!f||r.Date>=f)&&(!t||r.Date<=t)&&(!br||r.Branch===br)&&(!us||String(r.EnteredBy)===us)&&(!ty||r.Type===ty));
+  const modes=dayModes(list);
+  const sum=a=>a.reduce((s,r)=>s+Number(r.Amount||0),0);
+
+  dayTitle.textContent='Day Collection — '+(f===t?f:(f+' to '+t))+(br?' | '+br:'')+(us?' | '+us:'')+(ty?' | '+ty:'');
+  dayTotal.textContent=money(sum(list));
+  dayCount.textContent=list.length;
+  dayStudents.textContent=new Set(list.map(r=>String(r.AdmissionNo))).size;
+
+  /* mode summary */
+  let mRows='<tr><th>Payment Mode</th><th>Receipts</th><th>Amount</th></tr>';
+  modes.forEach(m=>{const rows=list.filter(r=>String(r.PaymentMode||'').trim()===m);if(!rows.length)return;mRows+=`<tr><td>${m}</td><td>${rows.length}</td><td>${money(sum(rows))}</td></tr>`});
+  if(!list.length)mRows+='<tr><td colspan="3">No collection for this selection.</td></tr>';
+  const rcp=list.filter(r=>r.Type==='Receipt'),oldl=list.filter(r=>r.Type==='Old Entry');
+  if(rcp.length&&oldl.length){
+    mRows+=`<tr><td colspan="3" style="padding:4px"></td></tr><tr><td>Of which — Receipts</td><td>${rcp.length}</td><td>${money(sum(rcp))}</td></tr><tr><td>Of which — Old Entries</td><td>${oldl.length}</td><td>${money(sum(oldl))}</td></tr>`;
+  }
+  mRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${list.length}</td><td>${money(sum(list))}</td></tr>`;
+  dayModeTable.innerHTML=mRows;
+
+  /* helper: mode-wise breakdown table grouped by a field */
+  const grouped=(field,label,tableEl)=>{
+    const keys=[...new Set(list.map(r=>String(r[field]||'-').trim()))].sort();
+    let rows='<tr><th>'+label+'</th>'+modes.map(m=>`<th>${m}</th>`).join('')+'<th>Receipts</th><th>Total</th></tr>';
+    keys.forEach(k=>{
+      const g=list.filter(r=>String(r[field]||'-').trim()===k);
+      rows+=`<tr><td>${k}</td>`+modes.map(m=>`<td>${money(sum(g.filter(r=>String(r.PaymentMode||'').trim()===m)))}</td>`).join('')+`<td>${g.length}</td><td><b>${money(sum(g))}</b></td></tr>`;
+    });
+    if(!keys.length)rows+=`<tr><td colspan="${modes.length+3}">No collection for this selection.</td></tr>`;
+    rows+='<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td>'+modes.map(m=>`<td>${money(sum(list.filter(r=>String(r.PaymentMode||'').trim()===m)))}</td>`).join('')+`<td>${list.length}</td><td>${money(sum(list))}</td></tr>`;
+    tableEl.innerHTML=rows;
+  };
+  grouped('EnteredBy','Entered By',dayUserTable);
+  grouped('Branch','Branch',dayBranchTable);
+
+  /* receipt detail */
+  let rRows='<tr><th>Type</th><th>Receipt / ID</th><th>Date</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Mode</th><th>Reference</th><th>By</th><th>Amount</th></tr>';
+  list.slice().sort((a,b)=>String(a.Date+a.No).localeCompare(String(b.Date+b.No))).forEach(r=>rRows+=`<tr><td><span class="status">${r.Type}</span></td><td>${r.No}</td><td>${r.Date}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.PaymentMode}</td><td>${r.ReferenceNo||''}</td><td>${r.EnteredBy||''}</td><td>${money(r.Amount)}</td></tr>`);
+  rRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="10">TOTAL</td><td>${money(sum(list))}</td></tr>`;
+  dayReceiptTable.innerHTML=rRows;
+}
+/* ===== END DAY COLLECTION ===== */
+
 function renderReceipts(){const q=(receiptSearch.value||'').toLowerCase(),f=receiptFrom.value,t=receiptTo.value;const list=db.receipts.filter(r=>(!q||String(r.ReceiptNo).toLowerCase().includes(q)||String(r.AdmissionNo).toLowerCase().includes(q)||String(r.StudentName).toLowerCase().includes(q))&&(!f||r.Date>=f)&&(!t||r.Date<=t));let rows='<tr><th>Action</th><th>Receipt</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Mode</th></tr>';list.slice().reverse().forEach(r=>rows+=`<tr><td><button class="btn-small" onclick="showReceipt('${r.ReceiptNo}')">Print</button></td><td>${r.ReceiptNo}</td><td>${r.Date}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.AcademicYear}</td><td>${r.YearNo}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);receiptsTable.innerHTML=rows}
-function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
+function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Discount</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
 /* auto-login if token exists */
 if(token&&currentUser){loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';refresh().then(applyRole).catch(()=>logout())}
 </script>
