@@ -38,7 +38,9 @@
 </nav><main>
 <section id="dashboard" class="section active">
 <div class="grid"><div class="card"><h3>Total Students</h3><div class="value" id="dashStudents">0</div></div><div class="card"><h3>Today's Collection</h3><div class="value" id="dashToday">₹0</div></div><div class="card"><h3>This Month</h3><div class="value" id="dashMonth">₹0</div></div><div class="card"><h3>Total Balance</h3><div class="value" id="dashBalance">₹0</div></div></div>
-<div class="card"><h2>Course-wise Summary</h2><div class="form-grid"><select id="dashBranchFilter" onchange="renderDashboard()"></select><input id="dashAY" placeholder="Academic Year (blank = all)" oninput="renderDashboard()"></div><table id="dashCourseTable"></table></div>
+<div class="grid"><div class="card"><h3>Old Dues (before cut-off)</h3><div class="value" id="dashOldDue" style="color:#b45309">₹0</div></div><div class="card"><h3>Current Dues (cut-off onward)</h3><div class="value" id="dashCurDue">₹0</div></div></div>
+<div class="card"><h2>Course-wise Summary</h2><div class="form-grid"><select id="dashBranchFilter" onchange="renderDashboard()"></select><input id="dashAY" placeholder="Academic Year (blank = all)" oninput="renderDashboard()"><div><label>Old / Current cut-off</label><input id="dashCut" value="2025-26" oninput="renderDashboard()"></div></div>
+<div class="note">Anything owed for an academic year <b>before</b> the cut-off counts as an old due. The cut-off year itself and everything after it counts as current.</div><table id="dashCourseTable"></table></div>
 <div class="card"><h2>Branch-wise Summary</h2><table id="dashBranchTable"></table></div>
 </section>
 <section id="students" class="section">
@@ -185,6 +187,10 @@ function feeStructure(st,yearNo){
   const running=ayFor(batch,yearNo);
   return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
 }
+function openingRowsFor(adm,year){return (db.openingBalances||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year))}
+/* A year is "old" if its old-due rows are dated before the cut-off,
+   otherwise it is judged on the year's own academic year. */
+function bucketAY(st,year,c){const ays=openingRowsFor(st.AdmissionNo,year).map(x=>normAY(x.AcademicYear)).filter(isAY).sort();return ays[0]||c.ay}
 function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
 function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
 function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
@@ -200,37 +206,39 @@ function renderDashboard(){
   const ayFilter=(typeof dashAY!=='undefined'&&dashAY)?(dashAY.value||'').trim():'';
 
   const course={},branch={};
-  let gTotal=0,gDisc=0,gPaid=0,gPending=0;
+  let gTotal=0,gDisc=0,gPaid=0,gOld=0,gCur=0,gPending=0;
+  const cut=(dashCut&&dashCut.value||'').trim()||'2025-26';
 
   db.students.forEach(st=>{
     if(brFilter&&st.Branch!==brFilter)return;
     const ck=st.Branch+' | '+st.Course;
-    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,disc:0,paid:0,pending:0};
-    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,disc:0,paid:0,pending:0};
+    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,disc:0,paid:0,oldd:0,curd:0,pending:0};
+    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,disc:0,paid:0,oldd:0,curd:0,pending:0};
     course[ck].students++;branch[st.Branch].students++;
     for(let y=1;y<=Number(st.CourseDuration||1);y++){
       const c=calcYear(st,y);
       if(ayFilter&&c.ay!==ayFilter)continue;
       const tot=c.total+c.op, ds=c.disc, pd=c.imp+c.paid, pen=c.balance;
-      course[ck].total+=tot;course[ck].disc+=ds;course[ck].paid+=pd;course[ck].pending+=pen;
-      branch[st.Branch].total+=tot;branch[st.Branch].disc+=ds;branch[st.Branch].paid+=pd;branch[st.Branch].pending+=pen;
-      gTotal+=tot;gDisc+=ds;gPaid+=pd;gPending+=pen;
+      const isOld=String(bucketAY(st,y,c))<cut, po=isOld?pen:0, pc=isOld?0:pen;
+      course[ck].total+=tot;course[ck].disc+=ds;course[ck].paid+=pd;course[ck].oldd+=po;course[ck].curd+=pc;course[ck].pending+=pen;
+      branch[st.Branch].total+=tot;branch[st.Branch].disc+=ds;branch[st.Branch].paid+=pd;branch[st.Branch].oldd+=po;branch[st.Branch].curd+=pc;branch[st.Branch].pending+=pen;
+      gTotal+=tot;gDisc+=ds;gPaid+=pd;gOld+=po;gCur+=pc;gPending+=pen;
     }
   });
 
-  dashBalance.textContent=money(gPending);
+  dashBalance.textContent=money(gPending);dashOldDue.textContent=money(gOld);dashCurDue.textContent=money(gCur);
 
-  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Pending</th></tr>';
+  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Old Due</th><th>Current Due</th><th>Total Pending</th></tr>';
   const cKeys=Object.keys(course).sort();
-  if(!cKeys.length){cRows+='<tr><td colspan="7">No students match this filter.</td></tr>'}
-  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
-  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  if(!cKeys.length){cRows+='<tr><td colspan="9">No students match this filter.</td></tr>'}
+  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.oldd)}</td><td>${money(r.curd)}</td><td><b>${money(r.pending)}</b></td></tr>`});
+  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gOld)}</td><td>${money(gCur)}</td><td>${money(gPending)}</td></tr>`;
   dashCourseTable.innerHTML=cRows;
 
-  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Pending</th></tr>';
+  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Old Due</th><th>Current Due</th><th>Total Pending</th></tr>';
   const bKeys=Object.keys(branch).sort();
-  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.pending)}</td></tr>`});
-  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gPending)}</td></tr>`;
+  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.oldd)}</td><td>${money(r.curd)}</td><td><b>${money(r.pending)}</b></td></tr>`});
+  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gOld)}</td><td>${money(gCur)}</td><td>${money(gPending)}</td></tr>`;
   dashBranchTable.innerHTML=bRows;
 }
 function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button><button class="btn-warning btn-small" onclick="goOldFee('${s.AdmissionNo}')">Old Fee</button>${isAdmin()?`<button class="btn-small" onclick="goDiscount('${s.AdmissionNo}')">Discount</button><button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
