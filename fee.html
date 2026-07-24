@@ -185,10 +185,10 @@ function feeStructure(st,yearNo){
   const running=ayFor(batch,yearNo);
   return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
 }
-function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
-function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
-function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
-function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
+function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
+function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
+function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
+function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
 function calcYear(st,year){const ay=ayFor(studentBatchAY(st),year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year), disc=discountFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-disc-imp-paid);return {ay,total,op,imp,paid,disc,balance,fs}}
 function renderDashboard(){
   dashStudents.textContent=db.students.length;
@@ -319,16 +319,12 @@ function renderUnlinked(){
   const rows=[];
   const check=(x,type,amt)=>{
     const st=studentByAdm(x.AdmissionNo);
-    const ay=normAY(x.AcademicYear), yr=Number(x.YearNo||0);
+    const yr=Number(x.YearNo||0), dur=st?Number(st.CourseDuration||0):0;
     let reason='';
-    if(!st) reason='Admission No is not in Student Master';
-    else{
-      const years=studentYears(st);
-      if(!years.length) reason='Course Duration is missing on the student record';
-      else if(!isAY(ay)) reason='Academic Year "'+x.AcademicYear+'" is not a valid year like 2025-26';
-      else if(!years.includes(ay)) reason='This student\'s years are '+years.join(', ')+' — fix the Admission Year in Student Master, or correct this row';
-      else if(years[yr-1]!==ay) reason='Year No should be '+(years.indexOf(ay)+1)+' for '+ay+', not '+yr;
-    }
+    if(!st) reason='Admission No is not in Student Master — add the student, or correct the admission number';
+    else if(!dur) reason='Course Duration is blank on the student record — set it in Students';
+    else if(!yr||yr<1||yr>dur) reason='Year No is '+(x.YearNo||'blank')+', but this course only has years 1 to '+dur;
+    else if(!(amt>0)) reason='Amount is zero — nothing to count';
     if(reason)rows.push({type,id:x.ID,date:x.Date,adm:x.AdmissionNo,name:x.StudentName||(st?st.StudentName:''),ay:x.AcademicYear,yr:x.YearNo,amt,reason});
   };
   (db.openingBalances||[]).forEach(x=>check(x,'Old Due',Number(x.OpeningBalance||0)));
