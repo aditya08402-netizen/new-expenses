@@ -57,6 +57,7 @@
 <div id="oldStudentBox"></div>
 <table id="oldYearTable"></table>
 </div>
+<div class="card"><h2>Records Not Linked to Any Student Year</h2><div id="unlinkedBox"></div><table id="unlinkedTable"></table></div>
 <div class="card"><h2>Old Fee Records (Old Due + Old Paid)</h2><table id="migrationTable"></table></div>
 </section>
 
@@ -156,27 +157,39 @@ async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
 function isStaff(){return isAdmin()||currentUser?.role==='Accountant'}
 function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.staff-only').forEach(e=>e.classList.toggle('hidden',!isStaff()))}
-function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;dayFrom.value=dayFrom.value||d;dayTo.value=dayTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(dayBranch,db.branches,true);opt(drBranch,db.branches,true);opt(drCourse,[...new Set(db.courses.map(c=>c.Course))],true);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderDiscounts();renderDay();renderReceipts();renderDueReport();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedDisAdm){const st=studentByAdm(selectedDisAdm);if(st)renderDiscountStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
+function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;dayFrom.value=dayFrom.value||d;dayTo.value=dayTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(dayBranch,db.branches,true);opt(drBranch,db.branches,true);opt(drCourse,[...new Set(db.courses.map(c=>c.Course))],true);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderUnlinked();renderDiscounts();renderDay();renderReceipts();renderDueReport();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedDisAdm){const st=studentByAdm(selectedDisAdm);if(st)renderDiscountStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
 function loadCourseOptions(branchSel,courseSel,preserve=true){const old=courseSel.value;const br=branchSel.value;const list=db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course);courseSel.innerHTML=list.map(c=>`<option>${c}</option>`).join('');if(preserve&&list.includes(old))courseSel.value=old}
 function fillDurationFromCourse(){const c=db.courses.find(x=>x.Branch===stBranch.value&&x.Course===stCourse.value);if(c)stDuration.value=c.DurationYears||''}
 function studentByAdm(a){return db.students.find(s=>String(s.AdmissionNo)===String(a))}
-function ayFor(startAY,yearNo){const m=String(startAY||'').match(/(\d{4})/);if(!m)return startAY;const y=Number(m[1])+Number(yearNo||1)-1;return y+'-'+String((y+1)%100).padStart(2,'0')}
+function normAY(v){const s=String(v==null?'':v).trim();const m=s.match(/(\d{4})/);if(!m)return s;const y=Number(m[1]);return y+'-'+String((y+1)%100).padStart(2,'0')}
+function isAY(v){return /^\d{4}-\d{2}$/.test(String(v||''))}
+function ayFor(startAY,yearNo){const m=String(startAY||'').match(/(\d{4})/);if(!m)return String(startAY||'');const y=Number(m[1])+Number(yearNo||1)-1;return y+'-'+String((y+1)%100).padStart(2,'0')}
+/* Batch year of a student. If Student Master has no valid Admission Year,
+   fall back to the earliest year seen on that student's own old-fee rows. */
+function studentBatchAY(st){
+  const a=normAY(st.AcademicYear);
+  if(isAY(a))return a;
+  const rows=[].concat(db.openingBalances||[],db.importedPayments||[]).filter(x=>String(x.AdmissionNo)===String(st.AdmissionNo));
+  const ays=rows.map(x=>normAY(x.AcademicYear)).filter(isAY).sort();
+  return ays[0]||a;
+}
+function studentYears(st){const b=studentBatchAY(st),out=[];for(let y=1;y<=Number(st.CourseDuration||1);y++)out.push(ayFor(b,y));return out}
 /* Fee follows the BATCH (admission year), not the running year.
    A student admitted in 2025-26 keeps the 2025-26 batch fee for Year 1, 2, 3.
    Falls back to the running-year structure so older entries still work.
    Uses the LAST matching row, so re-saving a structure overrides the old one. */
 function feeStructure(st,yearNo){
   const active=f=>String(f.Active).toUpperCase()!=='NO';
-  const pick=ay=>db.structures.filter(f=>f.AcademicYear===ay&&f.Branch===st.Branch&&f.Course===st.Course&&Number(f.YearNo)===Number(yearNo)&&active(f)).pop();
-  const batch=String(st.AcademicYear||'').trim();
-  const running=ayFor(st.AcademicYear,yearNo);
+  const pick=ay=>db.structures.filter(f=>normAY(f.AcademicYear)===normAY(ay)&&f.Branch===st.Branch&&f.Course===st.Course&&Number(f.YearNo)===Number(yearNo)&&active(f)).pop();
+  const batch=studentBatchAY(st);
+  const running=ayFor(batch,yearNo);
   return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
 }
-function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
-function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
-function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
-function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&x.AcademicYear===ay&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
-function calcYear(st,year){const ay=ayFor(st.AcademicYear,year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year), disc=discountFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-disc-imp-paid);return {ay,total,op,imp,paid,disc,balance,fs}}
+function openingFor(adm,ay,year){return db.openingBalances.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.OpeningBalance||0),0)}
+function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.ImportedAmount||0),0)}
+function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
+function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&normAY(x.AcademicYear)===normAY(ay)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
+function calcYear(st,year){const ay=ayFor(studentBatchAY(st),year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year), disc=discountFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-disc-imp-paid);return {ay,total,op,imp,paid,disc,balance,fs}}
 function renderDashboard(){
   dashStudents.textContent=db.students.length;
   const d=today(),m=d.slice(0,7);
@@ -301,6 +314,31 @@ async function saveOldEntry(){
     await refresh();
     alert('Old fee saved');
   }catch(e){alert(e.message)}
+}
+function renderUnlinked(){
+  const rows=[];
+  const check=(x,type,amt)=>{
+    const st=studentByAdm(x.AdmissionNo);
+    const ay=normAY(x.AcademicYear), yr=Number(x.YearNo||0);
+    let reason='';
+    if(!st) reason='Admission No is not in Student Master';
+    else{
+      const years=studentYears(st);
+      if(!years.length) reason='Course Duration is missing on the student record';
+      else if(!isAY(ay)) reason='Academic Year "'+x.AcademicYear+'" is not a valid year like 2025-26';
+      else if(!years.includes(ay)) reason='This student\'s years are '+years.join(', ')+' — fix the Admission Year in Student Master, or correct this row';
+      else if(years[yr-1]!==ay) reason='Year No should be '+(years.indexOf(ay)+1)+' for '+ay+', not '+yr;
+    }
+    if(reason)rows.push({type,id:x.ID,date:x.Date,adm:x.AdmissionNo,name:x.StudentName||(st?st.StudentName:''),ay:x.AcademicYear,yr:x.YearNo,amt,reason});
+  };
+  (db.openingBalances||[]).forEach(x=>check(x,'Old Due',Number(x.OpeningBalance||0)));
+  (db.importedPayments||[]).forEach(x=>check(x,'Old Paid',Number(x.ImportedAmount||0)));
+  (db.discounts||[]).forEach(x=>check(x,'Discount',Number(x.Amount||0)));
+  if(!rows.length){unlinkedBox.innerHTML='<div class="note" style="background:#ecfdf5;border-left-color:#0f766e;color:#065f46">All old fee records are linked correctly and are counted in the balances.</div>';unlinkedTable.innerHTML='';return}
+  unlinkedBox.innerHTML='<div class="note"><b>'+rows.length+' record(s) totalling '+money(rows.reduce((s,r)=>s+r.amt,0))+' are NOT being counted</b> in any balance, dashboard or report. Each row below says why. Most often the Admission Year on the student record does not match the year on the old fee row.</div>';
+  let h='<tr><th>Type</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Why it is not counted</th></tr>';
+  rows.forEach(r=>h+=`<tr><td><span class="status">${r.type}</span></td><td>${r.date}</td><td>${r.adm}</td><td>${r.name}</td><td>${r.ay}</td><td>${r.yr}</td><td>${money(r.amt)}</td><td>${r.reason}</td></tr>`);
+  unlinkedTable.innerHTML=h;
 }
 function renderMigration(){let rows='<tr><th>Type</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Remarks</th></tr>';db.openingBalances.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Due</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.OpeningBalance)}</td><td>${x.Remarks||''}</td></tr>`);db.importedPayments.slice().reverse().forEach(x=>rows+=`<tr><td><span class="status">Old Paid</span></td><td>${x.Date}</td><td>${x.AdmissionNo}</td><td>${x.StudentName}</td><td>${x.AcademicYear}</td><td>${x.YearNo}</td><td>${money(x.ImportedAmount)}</td><td>${x.Remarks||''}</td></tr>`);migrationTable.innerHTML=rows}
 /* ===== END OLD FEES ===== */
