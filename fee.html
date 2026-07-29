@@ -23,7 +23,7 @@
 <div id="app" class="app">
 <header><h1>Fee Management ERP</h1><div><span id="userInfo"></span> <button class="btn-secondary btn-small" onclick="refresh()">Refresh</button> <button class="btn-secondary btn-small" onclick="location.href='index.html'">ERP Home</button> <button class="btn-secondary btn-small" onclick="logout()">Logout</button></div></header>
 <div class="layout"><nav>
-<button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
+<button class="active admin-only" onclick="showSection('dashboard',this)">Dashboard</button>
 <button onclick="showSection('students',this)">Students</button>
 <button class="admin-only" onclick="showSection('masters',this)">Branches / Courses</button>
 <button class="admin-only" onclick="showSection('structure',this)">Fee Structure</button>
@@ -38,14 +38,29 @@
 </nav><main>
 <section id="dashboard" class="section active">
 <div class="grid"><div class="card"><h3>Total Students</h3><div class="value" id="dashStudents">0</div></div><div class="card"><h3>Today's Collection</h3><div class="value" id="dashToday">₹0</div></div><div class="card"><h3>This Month</h3><div class="value" id="dashMonth">₹0</div></div><div class="card"><h3>Total Balance</h3><div class="value" id="dashBalance">₹0</div></div></div>
-<div class="grid"><div class="card"><h3>Old Dues (before cut-off)</h3><div class="value" id="dashOldDue" style="color:#b45309">₹0</div></div><div class="card"><h3>Current Dues (cut-off onward)</h3><div class="value" id="dashCurDue">₹0</div></div></div>
-<div class="card"><h2>Course-wise Summary</h2><div class="form-grid"><select id="dashBranchFilter" onchange="renderDashboard()"></select><input id="dashAY" placeholder="Academic Year (blank = all)" oninput="renderDashboard()"><div><label>Old / Current cut-off</label><input id="dashCut" value="2025-26" oninput="renderDashboard()"></div></div>
-<div class="note">Anything owed for an academic year <b>before</b> the cut-off counts as an old due. The cut-off year itself and everything after it counts as current.</div><table id="dashCourseTable"></table></div>
-<div class="card"><h2>Branch-wise Summary</h2><table id="dashBranchTable"></table></div>
+<div class="grid"><div class="card"><h3>Pending — Present Year</h3><div class="value" id="dashCurDue">₹0</div></div><div class="card"><h3>Old Balance (previous years)</h3><div class="value" id="dashOldDue" style="color:#b45309">₹0</div></div></div>
+<div class="card"><div class="form-grid"><div><label>Present Academic Year</label><input id="dashPresentAY" placeholder="2026-27"></div><div class="admin-only" style="display:flex;align-items:flex-end"><button onclick="savePresentAY()">Save as Present Year</button></div><div><label>Branch</label><select id="dashBranchFilter" onchange="renderDashboard()"></select></div></div><div class="note" id="dashAYNote"></div></div>
+<div class="card"><h2 id="dashCurTitle">Present Year — Course-wise</h2><table id="dashCourseTable"></table></div>
+<div class="card"><h2 id="dashOldTitle">Old Balance — Previous Years</h2><div class="note">Amounts still pending from academic years before the present one, including dues carried over from your old records.</div><table id="dashOldTable"></table></div>
+<div class="card"><h2>Branch-wise Summary (Present Year + Old)</h2><table id="dashBranchTable"></table></div>
 </section>
 <section id="students" class="section">
 <div class="card"><h2>Student Master</h2><div class="form-grid"><div><label>Admission No</label><input id="stAdmissionNo"></div><div><label>Student Name</label><input id="stName"></div><div><label>Branch</label><select id="stBranch" onchange="loadCourseOptions(stBranch,stCourse,true)"></select></div><div><label>Course</label><select id="stCourse" onchange="fillDurationFromCourse()"></select></div><div><label>Duration</label><input id="stDuration" type="number"></div><div><label>Current Year</label><select id="stCurrentYear"><option>1</option><option>2</option><option>3</option></select></div><div><label>Academic Year</label><input id="stAcademicYear" placeholder="2026-27"></div><div><label>Hostel</label><select id="stHostel"><option>No</option><option>Yes</option></select></div><div><label>Mobile</label><input id="stMobile"></div><div><label>Active</label><select id="stActive"><option>YES</option><option>NO</option></select></div><div style="grid-column:1/-1"><label>Remarks</label><textarea id="stRemarks"></textarea></div></div><div class="top-actions"><button onclick="saveStudent()">Save Student</button><button class="btn-secondary" onclick="clearStudentForm()">Clear</button></div></div>
 <div class="card"><h2>Bulk Import Students</h2><div class="note">Paste CSV rows with columns: AdmissionNo,StudentName,Branch,Course,CourseDuration,CurrentYear,AcademicYear,Hostel,Mobile,Active</div><textarea id="bulkStudents" placeholder="260001,Ravi,Degree,B.Sc,3,1,2026-27,Yes,9876543210,YES"></textarea><div class="top-actions"><button onclick="bulkImportStudents()">Import Students</button></div></div>
+<div class="card admin-only"><h2>Promote to Next Year</h2>
+<div class="note">At the start of a new session, move a batch up one study year. Students already in their final year are left alone, or can be marked as completed. Preview first — this changes many records at once.</div>
+<div class="form-grid">
+<div><label>Branch</label><select id="promBranch" onchange="loadPromCourses();previewPromote()"></select></div>
+<div><label>Course</label><select id="promCourse" onchange="previewPromote()"></select></div>
+<div><label>Batch (Admission Year)</label><input id="promBatch" placeholder="blank = all batches" oninput="previewPromote()"></div>
+<div><label>Only students now in Year</label><select id="promFromYear" onchange="previewPromote()"><option value="">All years</option><option>1</option><option>2</option><option>3</option></select></div>
+<div><label>Final year students</label><select id="promMark" onchange="previewPromote()"><option value="">Leave unchanged</option><option value="YES">Mark as completed (Inactive)</option></select></div>
+</div>
+<div class="note" id="promPreview">Choose filters to see who will be affected.</div>
+<div class="top-actions"><button onclick="runPromote()">Promote Selected Students</button><button class="btn-secondary" onclick="previewPromote()">Refresh Preview</button></div>
+<table id="promTable"></table>
+</div>
+
 <div class="card"><h2>Student List</h2><div class="form-grid"><input id="studentSearch" placeholder="Search admission/name/mobile" oninput="renderStudents()"><select id="studentBranchFilter" onchange="renderStudents()"></select><select id="studentCourseFilter" onchange="renderStudents()"></select><select id="studentHostelFilter" onchange="renderStudents()"><option value="">All Hostel</option><option>Yes</option><option>No</option></select></div><table id="studentsTable"></table></div>
 </section>
 <section id="masters" class="section"><div class="grid"><div class="card"><h2>Add Branch</h2><input id="newBranch" placeholder="Branch"><div class="top-actions"><button onclick="addBranch()">Add Branch</button></div><table id="branchTable"></table></div><div class="card"><h2>Add Course</h2><label>Branch</label><select id="courseBranch"></select><label>Course</label><input id="newCourse"><label>Duration Years</label><input type="number" id="newDuration"><div class="top-actions"><button onclick="addCourse()">Add Course</button></div><table id="courseTable"></table></div></div></section>
@@ -108,6 +123,7 @@
 <div><label>Status</label><select id="drActive" onchange="renderDueReport()"><option value="">All</option><option>YES</option><option>NO</option></select></div>
 <div><label>Minimum Balance</label><input type="number" id="drMin" placeholder="0" oninput="renderDueReport()"></div>
 <div><label>Search</label><input id="drSearch" placeholder="Admission / Name / Mobile" oninput="renderDueReport()"></div>
+<div><label>Years to count</label><select id="drScope" onchange="renderDueReport()"><option value="auto">Up to current year</option><option value="current">Current year only</option><option value="all">All years of course</option></select></div>
 <div><label>Sort By</label><select id="drSort" onchange="renderDueReport()"><option value="balance">Highest Balance</option><option value="name">Student Name</option><option value="adm">Admission No</option><option value="branch">Branch / Course</option></select></div>
 </div>
 <div class="top-actions"><button class="btn-small btn-warning" onclick="printEl('duePrintArea')">Print</button><button class="btn-small btn-secondary" onclick="exportDue()">Download CSV</button><button class="btn-small btn-secondary" onclick="clearDueFilters()">Clear Filters</button></div>
@@ -148,7 +164,7 @@ const API_URL='https://script.google.com/macros/s/AKfycbwrNkDWt-XpCFxAoNGzAmykTE
 const LOGO_URL='';
 const WATERMARK_TEXT='SRI VIVEKANANDA';
 const RECEIPT_HEADER='SRI RAMAKRISHNA PARMAHAMSHA EDUCATIONAL SOCIETY';
-let token=localStorage.getItem('FEE_TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('FEE_USER')||'null');let db={students:[],branches:[],courses:[],structures:[],openingBalances:[],importedPayments:[],payments:[],receipts:[],discounts:[],users:[],serverDate:''};
+let token=localStorage.getItem('FEE_TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('FEE_USER')||'null');let db={students:[],branches:[],courses:[],structures:[],openingBalances:[],importedPayments:[],payments:[],receipts:[],discounts:[],settings:{},users:[],serverDate:''};
 function showLoad(v){loading.style.display=v?'flex':'none'}
 async function api(action,payload={}){showLoad(true);try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,token})});const j=await r.json();if(!j.success)throw new Error(j.message||'Error');return j;}finally{showLoad(false)}}
 function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN')}function today(){return new Date().toISOString().slice(0,10)}function isAdmin(){return currentUser?.role==='Admin'}function opt(sel,arr,all=false){if(!sel)return;const old=sel.value;sel.innerHTML=(all?'<option value="">All</option>':'')+arr.map(x=>`<option>${x}</option>`).join('');if([...sel.options].some(o=>o.value===old))sel.value=old}
@@ -156,10 +172,16 @@ async function login(){try{const j=await api('login',{username:loginUser.value.t
 function logout(){token='';currentUser=null;localStorage.removeItem('FEE_TOKEN');localStorage.removeItem('FEE_USER');app.style.display='none';loginPage.style.display='block'}
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 /* FAST: switching tabs no longer re-downloads the whole sheet. Data reloads only on save or the Refresh button. */
-function showSection(id,btn){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
+function showSection(id,btn){if(id==='dashboard'&&!isAdmin()){id='students';btn=document.querySelector("nav button[onclick*='students']")}document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active')}
 function isStaff(){return isAdmin()||currentUser?.role==='Accountant'}
-function applyRole(){document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));document.querySelectorAll('.staff-only').forEach(e=>e.classList.toggle('hidden',!isStaff()))}
-function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;dayFrom.value=dayFrom.value||d;dayTo.value=dayTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(dayBranch,db.branches,true);opt(drBranch,db.branches,true);opt(drCourse,[...new Set(db.courses.map(c=>c.Course))],true);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();renderMasters();renderStructures();renderMigration();renderUnlinked();renderDiscounts();renderDay();renderReceipts();renderDueReport();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedDisAdm){const st=studentByAdm(selectedDisAdm);if(st)renderDiscountStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
+function applyRole(){
+  document.querySelectorAll('.admin-only').forEach(e=>e.classList.toggle('hidden',!isAdmin()));
+  document.querySelectorAll('.staff-only').forEach(e=>e.classList.toggle('hidden',!isStaff()));
+  if(!isAdmin()&&document.getElementById('dashboard').classList.contains('active')){
+    showSection('students',document.querySelector("nav button[onclick*='students']"));
+  }
+}
+function renderAll(){const d=db.serverDate||today();payDate.value=payDate.value||d;receiptFrom.value=receiptFrom.value||d.slice(0,8)+'01';receiptTo.value=receiptTo.value||d;dayFrom.value=dayFrom.value||d;dayTo.value=dayTo.value||d;opt(stBranch,db.branches);loadCourseOptions(stBranch,stCourse,false);opt(dashBranchFilter,db.branches,true);opt(studentBranchFilter,db.branches,true);opt(studentCourseFilter,[...new Set(db.courses.map(c=>c.Course))],true);opt(promBranch,db.branches,true);loadPromCourses();opt(courseBranch,db.branches);opt(fsBranch,db.branches);loadCourseOptions(fsBranch,fsCourse,false);opt(dayBranch,db.branches,true);opt(drBranch,db.branches,true);opt(drCourse,[...new Set(db.courses.map(c=>c.Course))],true);opt(repBranch,db.branches,true);opt(repCourse,[...new Set(db.courses.map(c=>c.Course))],true);renderDashboard();renderStudents();previewPromote();renderMasters();renderStructures();renderMigration();renderUnlinked();renderDiscounts();renderDay();renderReceipts();renderDueReport();renderReports();if(selectedOldAdm){const st=studentByAdm(selectedOldAdm);if(st)renderOldStudent(st)}if(selectedDisAdm){const st=studentByAdm(selectedDisAdm);if(st)renderDiscountStudent(st)}if(selectedCollectionAdm){const st=studentByAdm(selectedCollectionAdm);if(st)renderCollectionStudent(st)}}
 function loadCourseOptions(branchSel,courseSel,preserve=true){const old=courseSel.value;const br=branchSel.value;const list=db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course);courseSel.innerHTML=list.map(c=>`<option>${c}</option>`).join('');if(preserve&&list.includes(old))courseSel.value=old}
 function fillDurationFromCourse(){const c=db.courses.find(x=>x.Branch===stBranch.value&&x.Course===stCourse.value);if(c)stDuration.value=c.DurationYears||''}
 function studentByAdm(a){return db.students.find(s=>String(s.AdmissionNo)===String(a))}
@@ -187,6 +209,17 @@ function feeStructure(st,yearNo){
   const running=ayFor(batch,yearNo);
   return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
 }
+/* Which study years should count as "due" right now.
+   auto    = up to the student's current year, plus any year that has a real recorded due/payment
+   current = only the current year, plus recorded years
+   all     = every year of the course, including years not yet started */
+function yearHasActivity(st,y){const a=st.AdmissionNo;return openingRowsFor(a,y).length>0||importedFor(a,'',y)>0||discountFor(a,'',y)>0||paidFor(a,'',y)>0}
+function includeYear(st,y,mode){
+  const cur=Number(st.CurrentYear||0)||Number(st.CourseDuration||1);
+  if(mode==='all')return true;
+  if(mode==='current')return y===cur||yearHasActivity(st,y);
+  return y<=cur||yearHasActivity(st,y);
+}
 function openingRowsFor(adm,year){return (db.openingBalances||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year))}
 /* A year is "old" if its old-due rows are dated before the cut-off,
    otherwise it is judged on the year's own academic year. */
@@ -196,49 +229,85 @@ function importedFor(adm,ay,year){return db.importedPayments.filter(x=>String(x.
 function paidFor(adm,ay,year){return db.payments.filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
 function discountFor(adm,ay,year){return (db.discounts||[]).filter(x=>String(x.AdmissionNo)===String(adm)&&Number(x.YearNo)===Number(year)).reduce((s,x)=>s+Number(x.Amount||0),0)}
 function calcYear(st,year){const ay=ayFor(studentBatchAY(st),year);const fs=feeStructure(st,year);let total=Number(fs.TotalFee||0);if(String(st.Hostel).toLowerCase()!=='yes') total-=Number(fs.HostelFee||0);const op=openingFor(st.AdmissionNo,ay,year), imp=importedFor(st.AdmissionNo,ay,year), paid=paidFor(st.AdmissionNo,ay,year), disc=discountFor(st.AdmissionNo,ay,year);const balance=Math.max(0,total+op-disc-imp-paid);return {ay,total,op,imp,paid,disc,balance,fs}}
+function defaultAY(){const d=String(db.serverDate||today());let y=Number(d.slice(0,4))||new Date().getFullYear();if(Number(d.slice(5,7))<6)y=y-1;return y+'-'+String((y+1)%100).padStart(2,'0')}
+/* Present academic year is remembered in this browser. If the backend ever
+   supports a shared setting, that value wins automatically. */
+function presentAY(){
+  const server=(db.settings&&db.settings.PresentAcademicYear)||'';
+  const local=localStorage.getItem('FEE_PRESENT_AY')||'';
+  const v=normAY(server||local);
+  return isAY(v)?v:defaultAY();
+}
+async function savePresentAY(){
+  const v=normAY(dashPresentAY.value);
+  if(!isAY(v)){alert('Enter the academic year like 2026-27');return}
+  localStorage.setItem('FEE_PRESENT_AY',v);
+  try{await api('saveSetting',{Key:'PresentAcademicYear',Value:v})}catch(e){}
+  renderAll();
+  alert('Present academic year set to '+v);
+}
 function renderDashboard(){
   dashStudents.textContent=db.students.length;
   const d=today(),m=d.slice(0,7);
   dashToday.textContent=money(db.payments.filter(p=>p.Date===d).reduce((s,p)=>s+Number(p.Amount||0),0));
   dashMonth.textContent=money(db.payments.filter(p=>String(p.Date).slice(0,7)===m).reduce((s,p)=>s+Number(p.Amount||0),0));
 
-  const brFilter=(typeof dashBranchFilter!=='undefined'&&dashBranchFilter)?dashBranchFilter.value:'';
-  const ayFilter=(typeof dashAY!=='undefined'&&dashAY)?(dashAY.value||'').trim():'';
+  const ay=presentAY();
+  if(document.activeElement!==dashPresentAY)dashPresentAY.value=ay;
+  dashAYNote.innerHTML=isAdmin()?'Everything below is based on <b>'+ay+'</b>. Change it at the start of a new session and press Save. It is remembered on this device, so set it once on each computer that uses the dashboard.':'Present academic year is <b>'+ay+'</b>. Only Admin can change this.';
+  dashCurTitle.textContent='Present Year ('+ay+') — Course-wise';
+  dashOldTitle.textContent='Old Balance — Years before '+ay;
 
-  const course={},branch={};
-  let gTotal=0,gDisc=0,gPaid=0,gOld=0,gCur=0,gPending=0;
-  const cut=(dashCut&&dashCut.value||'').trim()||'2025-26';
+  const brFilter=(dashBranchFilter&&dashBranchFilter.value)||'';
+  const cur={},old={},branch={};
+  let gT=0,gD=0,gP=0,gPend=0,gOld=0;
 
   db.students.forEach(st=>{
     if(brFilter&&st.Branch!==brFilter)return;
     const ck=st.Branch+' | '+st.Course;
-    if(!course[ck])course[ck]={branch:st.Branch,course:st.Course,students:0,total:0,disc:0,paid:0,oldd:0,curd:0,pending:0};
-    if(!branch[st.Branch])branch[st.Branch]={students:0,total:0,disc:0,paid:0,oldd:0,curd:0,pending:0};
-    course[ck].students++;branch[st.Branch].students++;
+    if(!branch[st.Branch])branch[st.Branch]={students:0,cur:0,old:0};
+    branch[st.Branch].students++;
     for(let y=1;y<=Number(st.CourseDuration||1);y++){
       const c=calcYear(st,y);
-      if(ayFilter&&c.ay!==ayFilter)continue;
+      const tag=String(bucketAY(st,y,c));
+      const isOld=tag<ay, isNow=tag===ay;
+      if(!isOld&&!isNow)continue;                       /* future years are not due yet */
       const tot=c.total+c.op, ds=c.disc, pd=c.imp+c.paid, pen=c.balance;
-      const isOld=String(bucketAY(st,y,c))<cut, po=isOld?pen:0, pc=isOld?0:pen;
-      course[ck].total+=tot;course[ck].disc+=ds;course[ck].paid+=pd;course[ck].oldd+=po;course[ck].curd+=pc;course[ck].pending+=pen;
-      branch[st.Branch].total+=tot;branch[st.Branch].disc+=ds;branch[st.Branch].paid+=pd;branch[st.Branch].oldd+=po;branch[st.Branch].curd+=pc;branch[st.Branch].pending+=pen;
-      gTotal+=tot;gDisc+=ds;gPaid+=pd;gOld+=po;gCur+=pc;gPending+=pen;
+      if(isNow){
+        if(!cur[ck])cur[ck]={branch:st.Branch,course:st.Course,students:0,total:0,disc:0,paid:0,pending:0};
+        cur[ck].students++;cur[ck].total+=tot;cur[ck].disc+=ds;cur[ck].paid+=pd;cur[ck].pending+=pen;
+        gT+=tot;gD+=ds;gP+=pd;gPend+=pen;branch[st.Branch].cur+=pen;
+      }else{
+        if(pen<=0)continue;
+        if(!old[ck])old[ck]={branch:st.Branch,course:st.Course,students:0,total:0,paid:0,pending:0};
+        old[ck].students++;old[ck].total+=tot;old[ck].paid+=pd;old[ck].pending+=pen;
+        gOld+=pen;branch[st.Branch].old+=pen;
+      }
     }
   });
 
-  dashBalance.textContent=money(gPending);dashOldDue.textContent=money(gOld);dashCurDue.textContent=money(gCur);
+  dashBalance.textContent=money(gPend+gOld);
+  dashCurDue.textContent=money(gPend);
+  dashOldDue.textContent=money(gOld);
 
-  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Old Due</th><th>Current Due</th><th>Total Pending</th></tr>';
-  const cKeys=Object.keys(course).sort();
-  if(!cKeys.length){cRows+='<tr><td colspan="9">No students match this filter.</td></tr>'}
-  cKeys.forEach(k=>{const r=course[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.oldd)}</td><td>${money(r.curd)}</td><td><b>${money(r.pending)}</b></td></tr>`});
-  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${cKeys.reduce((s,k)=>s+course[k].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gOld)}</td><td>${money(gCur)}</td><td>${money(gPending)}</td></tr>`;
+  let cRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Pending</th></tr>';
+  const ck2=Object.keys(cur).sort();
+  ck2.forEach(k=>{const r=cur[k];cRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td><b>${money(r.pending)}</b></td></tr>`});
+  if(!ck2.length)cRows+='<tr><td colspan="7">No students are in '+ay+'. Check the Present Academic Year, or promote students to the next year.</td></tr>';
+  cRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td colspan="2">TOTAL</td><td>${ck2.reduce((s,k)=>s+cur[k].students,0)}</td><td>${money(gT)}</td><td>${money(gD)}</td><td>${money(gP)}</td><td>${money(gPend)}</td></tr>`;
   dashCourseTable.innerHTML=cRows;
 
-  let bRows='<tr><th>Branch</th><th>Students</th><th>Total Fee</th><th>Discount</th><th>Paid</th><th>Old Due</th><th>Current Due</th><th>Total Pending</th></tr>';
-  const bKeys=Object.keys(branch).sort();
-  bKeys.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.disc)}</td><td>${money(r.paid)}</td><td>${money(r.oldd)}</td><td>${money(r.curd)}</td><td><b>${money(r.pending)}</b></td></tr>`});
-  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bKeys.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gTotal)}</td><td>${money(gDisc)}</td><td>${money(gPaid)}</td><td>${money(gOld)}</td><td>${money(gCur)}</td><td>${money(gPending)}</td></tr>`;
+  let oRows='<tr><th>Branch</th><th>Course</th><th>Students</th><th>Payable</th><th>Paid</th><th>Old Balance</th></tr>';
+  const ok=Object.keys(old).sort();
+  ok.forEach(k=>{const r=old[k];oRows+=`<tr><td>${r.branch}</td><td>${r.course}</td><td>${r.students}</td><td>${money(r.total)}</td><td>${money(r.paid)}</td><td><b>${money(r.pending)}</b></td></tr>`});
+  if(!ok.length)oRows+='<tr><td colspan="6">No old balance pending. </td></tr>';
+  oRows+=`<tr style="background:#fff7ed;font-weight:bold"><td colspan="5">TOTAL OLD BALANCE</td><td>${money(gOld)}</td></tr>`;
+  dashOldTable.innerHTML=oRows;
+
+  let bRows='<tr><th>Branch</th><th>Students</th><th>Present Year Pending</th><th>Old Balance</th><th>Total Pending</th></tr>';
+  const bk=Object.keys(branch).sort();
+  bk.forEach(b=>{const r=branch[b];bRows+=`<tr><td>${b}</td><td>${r.students}</td><td>${money(r.cur)}</td><td>${money(r.old)}</td><td><b>${money(r.cur+r.old)}</b></td></tr>`});
+  bRows+=`<tr style="background:#e0f2f1;font-weight:bold"><td>TOTAL</td><td>${bk.reduce((s,b)=>s+branch[b].students,0)}</td><td>${money(gPend)}</td><td>${money(gOld)}</td><td>${money(gPend+gOld)}</td></tr>`;
   dashBranchTable.innerHTML=bRows;
 }
 function renderStudents(){const q=(studentSearch.value||'').toLowerCase(),br=studentBranchFilter.value,co=studentCourseFilter.value,host=studentHostelFilter.value;let list=db.students.filter(s=>(!q||String(s.AdmissionNo).toLowerCase().includes(q)||String(s.StudentName).toLowerCase().includes(q)||String(s.Mobile).includes(q))&&(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host));let rows='<tr><th>Action</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Duration</th><th>Current Year</th><th>Academic Year</th><th>Hostel</th><th>Mobile</th><th>Active</th></tr>';list.slice().reverse().forEach(s=>rows+=`<tr><td><button class="btn-small" onclick="editStudent('${s.AdmissionNo}')">Edit</button><button class="btn-warning btn-small" onclick="goOldFee('${s.AdmissionNo}')">Old Fee</button>${isAdmin()?`<button class="btn-small" onclick="goDiscount('${s.AdmissionNo}')">Discount</button><button class="btn-danger btn-small" onclick="deleteStudent('${s.AdmissionNo}')">Delete</button>`:''}</td><td>${s.AdmissionNo}</td><td>${s.StudentName}</td><td>${s.Branch}</td><td>${s.Course}</td><td>${s.CourseDuration}</td><td>${s.CurrentYear}</td><td>${s.AcademicYear}</td><td>${s.Hostel}</td><td>${s.Mobile||''}</td><td>${s.Active}</td></tr>`);studentsTable.innerHTML=rows}
@@ -247,6 +316,42 @@ function editStudent(adm){const s=studentByAdm(adm);if(!s)return;stAdmissionNo.v
 async function saveStudent(){try{const p={AdmissionNo:stAdmissionNo.value,StudentName:stName.value,Branch:stBranch.value,Course:stCourse.value,CourseDuration:stDuration.value,CurrentYear:stCurrentYear.value,AcademicYear:stAcademicYear.value,Hostel:stHostel.value,Mobile:stMobile.value,Active:stActive.value,Remarks:stRemarks.value};const exists=studentByAdm(p.AdmissionNo);await api(exists?'updateStudent':'addStudent',p);await refresh();alert('Student saved')}catch(e){alert(e.message)}}
 async function deleteStudent(adm){if(confirm('Delete student?')){await api('deleteStudent',{admissionNo:adm});await refresh()}}
 async function bulkImportStudents(){try{const rows=bulkStudents.value.trim().split(/\n+/).filter(Boolean).map(line=>{const a=line.split(',');return {AdmissionNo:a[0],StudentName:a[1],Branch:a[2],Course:a[3],CourseDuration:a[4],CurrentYear:a[5],AcademicYear:a[6],Hostel:a[7],Mobile:a[8],Active:a[9]||'YES'}});const j=await api('bulkImportStudents',{students:rows});await refresh();alert(j.message)}catch(e){alert(e.message)}}
+function loadPromCourses(){const br=promBranch.value;opt(promCourse,[...new Set(db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course))],true)}
+function promoteMatches(){
+  const br=promBranch.value,co=promCourse.value,ba=(promBatch.value||'').trim(),fy=promFromYear.value;
+  return db.students.filter(st=>{
+    if(String(st.Active).toUpperCase()==='NO')return false;
+    if(br&&st.Branch!==br)return false;
+    if(co&&st.Course!==co)return false;
+    if(ba&&String(st.AcademicYear).trim()!==ba)return false;
+    const cur=Number(st.CurrentYear||0)||1;
+    if(fy&&cur!==Number(fy))return false;
+    return true;
+  });
+}
+function previewPromote(){
+  if(typeof promBranch==='undefined'||!promBranch)return;
+  const list=promoteMatches();
+  const up=list.filter(st=>(Number(st.CurrentYear||0)||1)<(Number(st.CourseDuration||0)||1));
+  const fin=list.filter(st=>(Number(st.CurrentYear||0)||1)>=(Number(st.CourseDuration||0)||1));
+  promPreview.innerHTML=`<b>${up.length}</b> student(s) will move up one year. <b>${fin.length}</b> are already in their final year — `+(promMark.value?'they will be marked completed and set inactive.':'they will be left unchanged.');
+  let rows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Batch</th><th>Now Year</th><th>After</th></tr>';
+  list.slice(0,200).forEach(st=>{const cur=Number(st.CurrentYear||0)||1,dur=Number(st.CourseDuration||0)||1;const after=cur<dur?String(cur+1):(promMark.value?'Completed':cur+' (no change)');rows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${st.AcademicYear}</td><td>${cur}</td><td><b>${after}</b></td></tr>`});
+  if(!list.length)rows+='<tr><td colspan="7">No active students match these filters.</td></tr>';
+  if(list.length>200)rows+='<tr><td colspan="7">Showing first 200 of '+list.length+'.</td></tr>';
+  promTable.innerHTML=rows;
+}
+async function runPromote(){
+  const list=promoteMatches();
+  const up=list.filter(st=>(Number(st.CurrentYear||0)||1)<(Number(st.CourseDuration||0)||1));
+  if(!list.length){alert('No students match these filters');return}
+  if(!confirm('Promote '+up.length+' student(s) to the next year?\n\nThis updates many records and cannot be undone automatically.'))return;
+  try{
+    const j=await api('promoteStudents',{Branch:promBranch.value,Course:promCourse.value,AcademicYear:(promBatch.value||'').trim(),FromYear:promFromYear.value,MarkCompleted:promMark.value});
+    await refresh();
+    alert(j.message);
+  }catch(e){alert(e.message)}
+}
 function renderMasters(){branchTable.innerHTML='<tr><th>Branch</th></tr>'+db.branches.map(b=>`<tr><td>${b}</td></tr>`).join('');courseTable.innerHTML='<tr><th>Branch</th><th>Course</th><th>Duration</th></tr>'+db.courses.map(c=>`<tr><td>${c.Branch}</td><td>${c.Course}</td><td>${c.DurationYears}</td></tr>`).join('')}
 async function addBranch(){try{await api('addBranch',{branch:newBranch.value});newBranch.value='';await refresh()}catch(e){alert(e.message)}}async function addCourse(){try{await api('addCourse',{branch:courseBranch.value,course:newCourse.value,duration:newDuration.value});newCourse.value='';newDuration.value='';await refresh()}catch(e){alert(e.message)}}
 async function saveFeeStructure(){
@@ -528,9 +633,9 @@ function renderDay(){
 function renderReceipts(){const q=(receiptSearch.value||'').toLowerCase(),f=receiptFrom.value,t=receiptTo.value;const list=db.receipts.filter(r=>(!q||String(r.ReceiptNo).toLowerCase().includes(q)||String(r.AdmissionNo).toLowerCase().includes(q)||String(r.StudentName).toLowerCase().includes(q))&&(!f||r.Date>=f)&&(!t||r.Date<=t));let rows='<tr><th>Action</th><th>Receipt</th><th>Date</th><th>Adm No</th><th>Name</th><th>AY</th><th>Year</th><th>Amount</th><th>Mode</th></tr>';list.slice().reverse().forEach(r=>rows+=`<tr><td><button class="btn-small" onclick="showReceipt('${r.ReceiptNo}')">Print</button></td><td>${r.ReceiptNo}</td><td>${r.Date}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.AcademicYear}</td><td>${r.YearNo}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);receiptsTable.innerHTML=rows}
 /* ===== FEE DUE REPORT (all filters) ===== */
 function printEl(id){const a=document.getElementById(id);a.classList.add('print-area');window.print();setTimeout(()=>a.classList.remove('print-area'),500)}
-function clearDueFilters(){['drAY','drBatch','drMin','drSearch'].forEach(i=>document.getElementById(i).value='');['drBranch','drCourse','drYearNo','drHostel','drActive'].forEach(i=>document.getElementById(i).value='');drSort.value='balance';renderDueReport()}
+function clearDueFilters(){['drAY','drBatch','drMin','drSearch'].forEach(i=>document.getElementById(i).value='');['drBranch','drCourse','drYearNo','drHostel','drActive'].forEach(i=>document.getElementById(i).value='');drSort.value='balance';drScope.value='auto';renderDueReport()}
 function dueRowsData(){
-  const br=drBranch.value,co=drCourse.value,ay=(drAY.value||'').trim(),batch=(drBatch.value||'').trim(),yn=drYearNo.value,host=drHostel.value,act=drActive.value,min=Number(drMin.value||0),q=(drSearch.value||'').toLowerCase();
+  const br=drBranch.value,co=drCourse.value,ay=(drAY.value||'').trim(),batch=(drBatch.value||'').trim(),yn=drYearNo.value,host=drHostel.value,act=drActive.value,min=Number(drMin.value||0),q=(drSearch.value||'').toLowerCase(),scope=(drScope&&drScope.value)||'auto';
   const out=[];
   db.students.forEach(st=>{
     if(br&&st.Branch!==br)return;
@@ -541,6 +646,7 @@ function dueRowsData(){
     if(q&&!(String(st.AdmissionNo).toLowerCase().includes(q)||String(st.StudentName).toLowerCase().includes(q)||String(st.Mobile||'').includes(q)))return;
     for(let y=1;y<=Number(st.CourseDuration||1);y++){
       if(yn&&Number(yn)!==y)continue;
+      if(!includeYear(st,y,scope))continue;
       const c=calcYear(st,y);
       if(ay&&c.ay!==ay)continue;
       if(c.balance<=0||c.balance<min)continue;
@@ -578,7 +684,7 @@ function exportDue(){
 }
 /* ===== END FEE DUE REPORT ===== */
 
-function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Discount</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
+function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Discount</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){if(!includeYear(st,y,'auto'))continue;const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
 /* auto-login if token exists */
 if(token&&currentUser){loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';refresh().then(applyRole).catch(()=>logout())}
 </script>
