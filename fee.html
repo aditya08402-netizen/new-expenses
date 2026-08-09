@@ -129,7 +129,7 @@
 <div class="top-actions"><button class="btn-small btn-warning" onclick="printEl('duePrintArea')">Print</button><button class="btn-small btn-secondary" onclick="exportDue()">Download CSV</button><button class="btn-small btn-secondary" onclick="clearDueFilters()">Clear Filters</button></div>
 </div>
 <div id="duePrintArea">
-<div class="card"><h2 id="dueTitle">Fee Due Report</h2><div class="grid"><div class="card"><h3>Students with Due</h3><div class="value" id="dueStudents">0</div></div><div class="card"><h3>Total Payable</h3><div class="value" id="duePayable">₹0</div></div><div class="card"><h3>Collected</h3><div class="value" id="dueCollected">₹0</div></div><div class="card"><h3>Total Pending</h3><div class="value" id="duePending">₹0</div></div></div></div>
+<div class="card"><h2 id="dueTitle">Fee Due Report</h2></div>
 <div class="card"><table id="dueTable"></table></div>
 </div>
 </section>
@@ -682,8 +682,7 @@ function renderDueReport(){
   if(typeof drBranch==='undefined'||!drBranch)return;
   const list=dueRowsData();
   const tPay=list.reduce((s,r)=>s+r.payable,0),tPaid=list.reduce((s,r)=>s+r.paid,0),tBal=list.reduce((s,r)=>s+r.balance,0),tDisc=list.reduce((s,r)=>s+r.disc,0);
-  dueStudents.textContent=new Set(list.map(r=>r.adm)).size;
-  duePayable.textContent=money(tPay);dueCollected.textContent=money(tPaid);duePending.textContent=money(tBal);
+  /* summary cards removed — totals still appear in the table's TOTAL row */
   const bits=[drBranch.value,drCourse.value,drAY.value&&('AY '+drAY.value),drBatch.value&&('Batch '+drBatch.value),drYearNo.value&&('Year '+drYearNo.value),drHostel.value&&('Hostel '+drHostel.value)].filter(Boolean);
   dueTitle.textContent='Fee Due Report'+(bits.length?' — '+bits.join(' | '):'');
   let rows='<tr><th>Adm No</th><th>Name</th><th>Mobile</th><th>Branch</th><th>Course</th><th>Batch</th><th>Year</th><th>Academic Year</th><th>Payable</th><th>Discount</th><th>Paid</th><th>Balance</th></tr>';
