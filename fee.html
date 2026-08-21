@@ -166,9 +166,10 @@ const WATERMARK_TEXT='SRI VIVEKANANDA';
 const RECEIPT_HEADER='SRI RAMAKRISHNA PARMAHAMSHA EDUCATIONAL SOCIETY';
 let token=localStorage.getItem('FEE_TOKEN')||'';let currentUser=JSON.parse(localStorage.getItem('FEE_USER')||'null');let db={students:[],branches:[],courses:[],structures:[],openingBalances:[],importedPayments:[],payments:[],receipts:[],discounts:[],settings:{},users:[],serverDate:''};
 function showLoad(v){loading.style.display=v?'flex':'none'}
-async function api(action,payload={}){showLoad(true);try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,token})});const j=await r.json();if(!j.success)throw new Error(j.message||'Error');return j;}finally{showLoad(false)}}
+async function api(action,payload={}){showLoad(true);try{const r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,payload,token})});const j=await r.json();if(!j.success){if(/session expired/i.test(j.message||'')){sessionExpired();throw new Error('__handled__')}throw new Error(j.message||'Error')}return j;}finally{showLoad(false)}}
+function sessionExpired(){token='';currentUser=null;localStorage.removeItem('FEE_TOKEN');localStorage.removeItem('FEE_USER');app.style.display='none';loginPage.style.display='block';showLoad(false);if(!window.__sessMsg){window.__sessMsg=true;setTimeout(()=>{alert('Your session has ended. Please login again.');window.__sessMsg=false},100)}}
 function money(n){return '₹'+(Number(n)||0).toLocaleString('en-IN')}function today(){return new Date().toISOString().slice(0,10)}function isAdmin(){return currentUser?.role==='Admin'}function opt(sel,arr,all=false){if(!sel)return;const old=sel.value;sel.innerHTML=(all?'<option value="">All</option>':'')+arr.map(x=>`<option>${x}</option>`).join('');if([...sel.options].some(o=>o.value===old))sel.value=old}
-async function login(){try{const j=await api('login',{username:loginUser.value.trim(),password:loginPass.value.trim()});token=j.token;currentUser=j.user;localStorage.setItem('FEE_TOKEN',token);localStorage.setItem('FEE_USER',JSON.stringify(currentUser));loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';await refresh();applyRole();}catch(e){alert(e.message)}}
+async function login(){try{const j=await api('login',{username:loginUser.value.trim(),password:loginPass.value.trim()});token=j.token;currentUser=j.user;localStorage.setItem('FEE_TOKEN',token);localStorage.setItem('FEE_USER',JSON.stringify(currentUser));loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';await refresh();applyRole();}catch(e){if(e.message!=='__handled__')alert(e.message)}}
 function logout(){token='';currentUser=null;localStorage.removeItem('FEE_TOKEN');localStorage.removeItem('FEE_USER');app.style.display='none';loginPage.style.display='block'}
 async function refresh(){const j=await api('getInit');db=j.data;renderAll()}
 /* FAST: switching tabs no longer re-downloads the whole sheet. Data reloads only on save or the Refresh button. */
@@ -334,9 +335,9 @@ function exportStudents(){
 }
 function clearStudentForm(){['stAdmissionNo','stName','stDuration','stAcademicYear','stMobile','stReference','stRemarks'].forEach(id=>document.getElementById(id).value='');stCurrentYear.value='1';stHostel.value='No';stActive.value='YES'}
 function editStudent(adm){const s=studentByAdm(adm);if(!s)return;stAdmissionNo.value=s.AdmissionNo;stName.value=s.StudentName;stBranch.value=s.Branch;loadCourseOptions(stBranch,stCourse,false);stCourse.value=s.Course;stDuration.value=s.CourseDuration;stCurrentYear.value=s.CurrentYear;stAcademicYear.value=s.AcademicYear;stHostel.value=s.Hostel;stMobile.value=s.Mobile;stReference.value=s.Reference||'';stActive.value=s.Active;stRemarks.value=s.Remarks||'';showSection('students',document.querySelector("nav button[onclick*='students']"))}
-async function saveStudent(){try{const p={AdmissionNo:stAdmissionNo.value,StudentName:stName.value,Branch:stBranch.value,Course:stCourse.value,CourseDuration:stDuration.value,CurrentYear:stCurrentYear.value,AcademicYear:stAcademicYear.value,Hostel:stHostel.value,Mobile:stMobile.value,Reference:stReference.value,Active:stActive.value,Remarks:stRemarks.value};const exists=studentByAdm(p.AdmissionNo);await api(exists?'updateStudent':'addStudent',p);await refresh();alert('Student saved')}catch(e){alert(e.message)}}
+async function saveStudent(){try{const p={AdmissionNo:stAdmissionNo.value,StudentName:stName.value,Branch:stBranch.value,Course:stCourse.value,CourseDuration:stDuration.value,CurrentYear:stCurrentYear.value,AcademicYear:stAcademicYear.value,Hostel:stHostel.value,Mobile:stMobile.value,Reference:stReference.value,Active:stActive.value,Remarks:stRemarks.value};const exists=studentByAdm(p.AdmissionNo);await api(exists?'updateStudent':'addStudent',p);await refresh();alert('Student saved')}catch(e){if(e.message!=='__handled__')alert(e.message)}}
 async function deleteStudent(adm){if(confirm('Delete student?')){await api('deleteStudent',{admissionNo:adm});await refresh()}}
-async function bulkImportStudents(){try{const rows=bulkStudents.value.trim().split(/\n+/).filter(Boolean).map(line=>{const a=line.split(',');return {AdmissionNo:a[0],StudentName:a[1],Branch:a[2],Course:a[3],CourseDuration:a[4],CurrentYear:a[5],AcademicYear:a[6],Hostel:a[7],Mobile:a[8],Active:a[9]||'YES'}});const j=await api('bulkImportStudents',{students:rows});await refresh();alert(j.message)}catch(e){alert(e.message)}}
+async function bulkImportStudents(){try{const rows=bulkStudents.value.trim().split(/\n+/).filter(Boolean).map(line=>{const a=line.split(',');return {AdmissionNo:a[0],StudentName:a[1],Branch:a[2],Course:a[3],CourseDuration:a[4],CurrentYear:a[5],AcademicYear:a[6],Hostel:a[7],Mobile:a[8],Active:a[9]||'YES'}});const j=await api('bulkImportStudents',{students:rows});await refresh();alert(j.message)}catch(e){if(e.message!=='__handled__')alert(e.message)}}
 function loadPromCourses(){const br=promBranch.value;opt(promCourse,[...new Set(db.courses.filter(c=>!br||c.Branch===br).map(c=>c.Course))],true)}
 function promoteMatches(){
   const br=promBranch.value,co=promCourse.value,ba=(promBatch.value||'').trim(),fy=promFromYear.value;
@@ -371,10 +372,10 @@ async function runPromote(){
     const j=await api('promoteStudents',{Branch:promBranch.value,Course:promCourse.value,AcademicYear:(promBatch.value||'').trim(),FromYear:promFromYear.value,MarkCompleted:promMark.value});
     await refresh();
     alert(j.message);
-  }catch(e){alert(e.message)}
+  }catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
 function renderMasters(){branchTable.innerHTML='<tr><th>Branch</th></tr>'+db.branches.map(b=>`<tr><td>${b}</td></tr>`).join('');courseTable.innerHTML='<tr><th>Branch</th><th>Course</th><th>Duration</th></tr>'+db.courses.map(c=>`<tr><td>${c.Branch}</td><td>${c.Course}</td><td>${c.DurationYears}</td></tr>`).join('')}
-async function addBranch(){try{await api('addBranch',{branch:newBranch.value});newBranch.value='';await refresh()}catch(e){alert(e.message)}}async function addCourse(){try{await api('addCourse',{branch:courseBranch.value,course:newCourse.value,duration:newDuration.value});newCourse.value='';newDuration.value='';await refresh()}catch(e){alert(e.message)}}
+async function addBranch(){try{await api('addBranch',{branch:newBranch.value});newBranch.value='';await refresh()}catch(e){if(e.message!=='__handled__')alert(e.message)}}async function addCourse(){try{await api('addCourse',{branch:courseBranch.value,course:newCourse.value,duration:newDuration.value});newCourse.value='';newDuration.value='';await refresh()}catch(e){if(e.message!=='__handled__')alert(e.message)}}
 async function saveFeeStructure(){
   try{
     const base={AcademicYear:fsAY.value.trim(),Branch:fsBranch.value,Course:fsCourse.value,CollegeFee:fsCollege.value,HostelFee:fsHostel.value,OtherFee:fsOther.value,Active:fsActive.value,Remarks:fsRemarks.value};
@@ -389,7 +390,7 @@ async function saveFeeStructure(){
     for(const y of years) await api('saveFeeStructure',Object.assign({},base,{YearNo:y}));
     await refresh();
     alert(years.length>1?`Fee structure saved for Year 1 to ${years.length} of batch ${base.AcademicYear}`:'Fee structure saved');
-  }catch(e){alert(e.message)}
+  }catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
 function renderStructures(){let rows='<tr><th>Batch Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(f.TotalFee)}</td><td>${f.Active}</td></tr>`);structureTable.innerHTML=rows}
 
@@ -447,7 +448,7 @@ async function saveOldEntry(){
     oldModal.classList.add('hidden');
     await refresh();
     alert('Old fee saved');
-  }catch(e){alert(e.message)}
+  }catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
 function renderUnlinked(){
   const rows=[];
@@ -536,11 +537,11 @@ async function saveDiscount(){
     disModal.classList.add('hidden');
     await refresh();
     alert('Discount saved');
-  }catch(e){alert(e.message)}
+  }catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
 async function removeDiscount(id){
   if(!confirm('Remove this discount?'))return;
-  try{await api('deleteDiscount',{ID:id});await refresh()}catch(e){alert(e.message)}
+  try{await api('deleteDiscount',{ID:id});await refresh()}catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
 function renderDiscounts(){
   const q=(disRegSearch.value||'').toLowerCase();
@@ -587,7 +588,7 @@ function loadStudentForCollection(){
 }
 function renderCollectionStudent(st){collectStudentBox.innerHTML=`<div class="note"><b>${st.StudentName}</b> | ${st.AdmissionNo} | ${st.Branch} - ${st.Course} | Admission AY: ${st.AcademicYear} | Hostel: ${st.Hostel}</div>`;let rows='<tr><th>Year</th><th>Academic Year</th><th>Total Fee</th><th>Old Due</th><th>Discount</th><th>Old Paid</th><th>Receipt Paid</th><th>Balance</th><th>Action</th></tr>';for(let y=1;y<=Number(st.CourseDuration||1);y++){const c=calcYear(st,y);rows+=`<tr><td>${y}</td><td>${c.ay}</td><td>${money(c.total)}</td><td>${money(c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp)}</td><td>${money(c.paid)}</td><td>${money(c.balance)}</td>`+`<td>${c.balance>0?`<button class="btn-warning btn-small" onclick="openPay('${st.AdmissionNo}','${c.ay}',${y},${c.balance})">Pay</button>`:'-'}</td></tr>`}yearFeeTable.innerHTML=rows}
 function openPay(adm,ay,year,balance){payAdm.value=adm;payAY.value=ay;payYear.value=year;payNote.textContent='Balance for '+ay+' Year '+year+': '+money(balance);payAmount.value=balance;payAmount.max=balance;payDate.value=db.serverDate||today();payModal.classList.remove('hidden')}
-async function collectPayment(){try{const j=await api('collectFee',{AdmissionNo:payAdm.value,AcademicYear:payAY.value,YearNo:payYear.value,FeeHead:payHead.value,Amount:payAmount.value,PaymentMode:payMode.value,ReferenceNo:payRef.value,Date:payDate.value,Remarks:payRemarks.value});payModal.classList.add('hidden');await refresh();showReceipt(j.receiptNo);loadStudentForCollection()}catch(e){alert(e.message)}}
+async function collectPayment(){try{const j=await api('collectFee',{AdmissionNo:payAdm.value,AcademicYear:payAY.value,YearNo:payYear.value,FeeHead:payHead.value,Amount:payAmount.value,PaymentMode:payMode.value,ReferenceNo:payRef.value,Date:payDate.value,Remarks:payRemarks.value});payModal.classList.add('hidden');await refresh();showReceipt(j.receiptNo);loadStudentForCollection()}catch(e){if(e.message!=='__handled__')alert(e.message)}}
 function showReceipt(no){const r=db.receipts.find(x=>String(x.ReceiptNo)===String(no));if(!r)return;const wm=LOGO_URL?`<div class="watermark"><img src="${LOGO_URL}" alt=""></div>`:`<div class="watermark"><span>${WATERMARK_TEXT}</span></div>`;receiptPrint.innerHTML=wm+`<h2>${RECEIPT_HEADER}</h2><h3 style="text-align:center">Fee Receipt</h3><div class="row"><b>Receipt No:</b><span>${r.ReceiptNo}</span></div><div class="row"><b>Date:</b><span>${r.Date}</span></div><div class="row"><b>Admission No:</b><span>${r.AdmissionNo}</span></div><div class="row"><b>Student:</b><span>${r.StudentName}</span></div><div class="row"><b>Branch/Course:</b><span>${r.Branch} / ${r.Course}</span></div><div class="row"><b>Academic Year:</b><span>${r.AcademicYear} - Year ${r.YearNo}</span></div><table><tr><th>Fee Head</th><th>Amount</th><th>Mode</th><th>Reference</th></tr><tr><td>${r.FeeHead}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td><td>${r.ReferenceNo||''}</td></tr></table><br><div class="row"><span>Received By: ${r.EnteredBy||''}</span><span>Signature</span></div>`;receiptModal.classList.remove('hidden')}
 /* ===== DAY COLLECTION (Admin + Accountant) ===== */
 const PAY_MODES=['Cash','GPay','PhonePe','Bank Transfer','Cheque'];
@@ -706,6 +707,6 @@ function exportDue(){
 
 function renderReports(){const br=repBranch.value,co=repCourse.value,ay=repAY.value,host=repHostel.value;let dueRows='<tr><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>Year</th><th>Academic Year</th><th>Total</th><th>Discount</th><th>Paid</th><th>Balance</th></tr>';db.students.filter(s=>(!br||s.Branch===br)&&(!co||s.Course===co)&&(!host||s.Hostel===host)).forEach(st=>{for(let y=1;y<=Number(st.CourseDuration||1);y++){if(!includeYear(st,y,'auto'))continue;const c=calcYear(st,y);if(ay&&c.ay!==ay)continue;if(c.balance>0)dueRows+=`<tr><td>${st.AdmissionNo}</td><td>${st.StudentName}</td><td>${st.Branch}</td><td>${st.Course}</td><td>${y}</td><td>${c.ay}</td><td>${money(c.total+c.op)}</td><td>${money(c.disc)}</td><td>${money(c.imp+c.paid)}</td><td>${money(c.balance)}</td></tr>`}});dueReportTable.innerHTML=dueRows;let colRows='<tr><th>Date</th><th>Receipt</th><th>Adm No</th><th>Name</th><th>Branch</th><th>Course</th><th>AY</th><th>Amount</th><th>Mode</th></tr>';db.receipts.filter(r=>(!br||r.Branch===br)&&(!co||r.Course===co)&&(!ay||r.AcademicYear===ay)).forEach(r=>colRows+=`<tr><td>${r.Date}</td><td>${r.ReceiptNo}</td><td>${r.AdmissionNo}</td><td>${r.StudentName}</td><td>${r.Branch}</td><td>${r.Course}</td><td>${r.AcademicYear}</td><td>${money(r.Amount)}</td><td>${r.PaymentMode}</td></tr>`);collectionReportTable.innerHTML=colRows}
 /* auto-login if token exists */
-if(token&&currentUser){loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';refresh().then(applyRole).catch(()=>logout())}
+if(token&&currentUser){loginPage.style.display='none';app.style.display='block';userInfo.textContent=currentUser.username+' ('+currentUser.role+')';refresh().then(applyRole).catch(()=>{})}
 </script>
 </body></html>
