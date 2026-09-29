@@ -208,7 +208,12 @@ function feeStructure(st,yearNo){
   const pick=ay=>db.structures.filter(f=>normAY(f.AcademicYear)===normAY(ay)&&f.Branch===st.Branch&&f.Course===st.Course&&Number(f.YearNo)===Number(yearNo)&&active(f)).pop();
   const batch=studentBatchAY(st);
   const running=ayFor(batch,yearNo);
-  return pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
+  const f=pick(batch)||pick(running)||{CollegeFee:0,HostelFee:0,OtherFee:0,TotalFee:0};
+  /* Always recompute the total from the parts, so an Other/College/Hostel value
+     typed straight into the sheet is never ignored by a stale TotalFee cell. */
+  const college=Number(f.CollegeFee||0),hostel=Number(f.HostelFee||0),other=Number(f.OtherFee||0);
+  const computed=college+hostel+other;
+  return Object.assign({},f,{CollegeFee:college,HostelFee:hostel,OtherFee:other,TotalFee:computed||Number(f.TotalFee||0)});
 }
 /* Which study years should count as "due" right now.
    auto    = up to the student's current year, plus any year that has a real recorded due/payment
@@ -392,7 +397,7 @@ async function saveFeeStructure(){
     alert(years.length>1?`Fee structure saved for Year 1 to ${years.length} of batch ${base.AcademicYear}`:'Fee structure saved');
   }catch(e){if(e.message!=='__handled__')alert(e.message)}
 }
-function renderStructures(){let rows='<tr><th>Batch Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(f.TotalFee)}</td><td>${f.Active}</td></tr>`);structureTable.innerHTML=rows}
+function renderStructures(){let rows='<tr><th>Batch Year</th><th>Branch</th><th>Course</th><th>Year</th><th>College</th><th>Hostel</th><th>Other</th><th>Total</th><th>Active</th></tr>';db.structures.slice().reverse().forEach(f=>{const tot=Number(f.CollegeFee||0)+Number(f.HostelFee||0)+Number(f.OtherFee||0);rows+=`<tr><td>${f.AcademicYear}</td><td>${f.Branch}</td><td>${f.Course}</td><td>${f.YearNo}</td><td>${money(f.CollegeFee)}</td><td>${money(f.HostelFee)}</td><td>${money(f.OtherFee)}</td><td>${money(tot||Number(f.TotalFee||0))}</td><td>${f.Active}</td></tr>`});structureTable.innerHTML=rows}
 
 /* ===== OLD FEES: unified old due + old paid on one page ===== */
 let selectedOldAdm='';
